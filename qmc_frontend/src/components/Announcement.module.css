@@ -1,0 +1,23 @@
+.dropdownToggle::after {
+    content: none;
+}
+
+.dropdownToggle{
+    color:  black !important;
+    background-color: rgb(247, 247, 249) !important;
+    border: none !important;
+}
+
+.dotIcon {
+}
+
+
+@media only screen and (max-width: 600px) {
+    .annFont{
+        font-size: 15px;
+    }
+
+    .readFont{
+        font-size: 15px;
+    }
+}

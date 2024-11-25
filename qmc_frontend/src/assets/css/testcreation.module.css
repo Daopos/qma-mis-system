@@ -1,0 +1,69 @@
+.titleContainer {
+    width: 500;
+}
+
+
+.QAContainer {
+    border: 1px solid rgb(189, 189, 189, .5);
+    padding: 20px 20px;
+    background-color: rgb(247, 247, 249);
+    width: 700px;
+}
+
+.choices {
+    list-style: none ;
+    padding-left: 0;
+}
+
+.iconContainer {
+    border: 1px solid rgb(189, 189, 189, .5);
+    margin: 0 5px;
+    padding: 3px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+
+.typeContainer {
+    border: 1px solid rgb(189, 189, 189, .5);
+    padding: 3px 5px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.titleText {
+    margin-top: 10px;
+    font-weight: 600;
+}
+
+.sideContainer {
+    padding: 50px;
+    position: sticky;
+    top: 0;
+}
+
+.sideBox {
+    background-color: rgb(247, 247, 249);
+    border: 1px solid rgb(189, 189, 189, .5);
+
+    padding: 20px;
+    padding: 50px;
+
+    position: sticky;
+    top: 0;
+}
+
+.pts {
+    font-size: small;
+    font-style: italic;
+}
+
+.mainContainer {
+}
+
+@media only screen and (max-width: 1600px) {
+    .QAContainer {
+        width: 500px;
+    }
+  }
+

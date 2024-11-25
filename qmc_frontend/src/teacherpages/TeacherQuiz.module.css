@@ -1,0 +1,71 @@
+.testCard {
+    padding: 20px;
+    border: 1px solid rgb(189, 189, 189, 0.5);
+    border-radius: 10px;
+    width: 700px;
+    background-color: #fff;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.testCard:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.iconContainer {
+    border: 1px solid rgb(189, 189, 189, 0.5);
+    margin: 0 5px;
+    padding: 3px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.iconContainer:hover {
+    background-color: #f0f0f0;
+}
+
+.iconContainer h4 {
+    font-size: 1.5rem;
+    margin: 0;
+}
+
+.iconContainer small, .iconContainer h6 {
+    margin: 5px 0;
+    color: #666;
+}
+
+
+@media only screen and (max-width: 700px) {
+    .testCard {
+        width: 100%;
+    }
+  }
+
+/* ViewStudentSubmission */
+.tableResponsiveContainer {
+    overflow-x: auto; /* Enable horizontal scrolling */
+    max-width: 100%; /* Ensure it doesn't exceed its parent's width */
+    -webkit-overflow-scrolling: touch; /* Smooth scrolling for touch devices */
+}
+
+.table {
+    min-width: 800px; /* Set a minimum width for the table */
+    border-collapse: collapse; /* Optional for cleaner table appearance */
+}
+
+.table th,
+.table td {
+    white-space: nowrap; /* Prevent text wrapping for cleaner scrolling */
+}
+
+@media (max-width: 768px) {
+    .table th,
+    .table td {
+        font-size: 0.9rem; /* Adjust font size for smaller screens */
+    }
+}

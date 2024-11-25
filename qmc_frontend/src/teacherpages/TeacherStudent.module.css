@@ -1,0 +1,90 @@
+/* Container for the student list */
+.container {
+    padding: 20px;
+}
+
+/* Styling the list container */
+.listContainer {
+    background-color: #f7f9fc;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Title styling */
+.listTitleContainer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.listTitleContainer h2 {
+    font-size: 1.75rem;
+    color: #333;
+}
+
+/* Table styling */
+.listTable {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.listTable th,
+.listTable td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.listTable th {
+    background-color: #f0f0f0;
+    font-weight: bold;
+    color: #333;
+}
+
+/* Button styles */
+.buttonList {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.buttonList:hover {
+    background-color: #0056b3;
+}
+
+/* Modal form input styling */
+.formGroup {
+    margin-bottom: 15px;
+}
+
+.formControl {
+    padding: 8px;
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.modalTitle {
+    font-size: 1.5rem;
+    color: #333;
+}
+
+/* Loading spinner center */
+.spinnerContainer {
+    text-align: center;
+    padding: 20px;
+}
+
+/* Modal footer buttons */
+.modalFooterButton {
+    padding: 8px 12px;
+    border-radius: 5px;
+    font-size: 1rem;
+}

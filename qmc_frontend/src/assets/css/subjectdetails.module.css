@@ -1,0 +1,36 @@
+.linkContainer {
+    display: flex;
+    box-shadow: 0 5px 5px -5px #333;
+    overflow-x: auto; /* Enable horizontal scrolling */
+    white-space: nowrap; /* Prevent wrapping of links */
+    scrollbar-width: none; /* Hide scrollbar in Firefox */
+}
+.link {
+    padding: 15px;
+    text-decoration: none;
+    color: rgba(33, 33, 33, 0.7);
+    position: relative; /* Required for positioning the pseudo-element */
+    transition: color 0.5s ease; /* Transition for color change */
+}
+
+.link::after {
+    content: '';
+    position: absolute;
+    left: 50%; /* Start from the center */
+    bottom: 0;
+    width: 0; /* Initial width of the bottom border */
+    height: 3px;
+    background-color: blue; /* Color of the bottom border */
+    transition: width 0.3s ease, left 0.3s ease; /* Transition properties */
+}
+.link:hover {
+    background-color: rgb(221, 221, 221, 0.5);
+    color: black;
+    border-radius: 2px;
+}
+
+
+.active::after {
+    width: 100%; /* Expand to full width */
+    left: 0; /* Align with the left edge */
+}

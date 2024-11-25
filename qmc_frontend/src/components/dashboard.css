@@ -1,0 +1,44 @@
+.registrar-dashboard {
+    padding: 20px 30px;
+    background-color: #f7f7f9; /* Light background for contrast */
+    border-radius: 8px; /* Rounded corners for a modern look */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+.dashboard-header h1 {
+    margin-bottom: 20px; /* Space below the title */
+    font-size: 24px; /* Larger font for the header */
+    color: #333; /* Dark text for contrast */
+}
+
+.dashboard-content {
+    display: flex;
+    flex-direction: column; /* Stack boxes and announcements */
+}
+
+.dashboard-boxes {
+    display: flex;
+    justify-content: center; /* Center dashboard boxes */
+    gap: 30px; /* Space between boxes */
+}
+
+.announcements-section {
+    background-color: #fff; /* White background for announcements */
+    padding: 20px; /* Padding around the announcements */
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+.announcements-section h2 {
+    margin-bottom: 15px; /* Space below announcements title */
+}
+
+.announcements-list {
+    display: flex;
+    flex-direction: column; /* Stack announcements vertically */
+    gap: 15px; /* Space between announcements */
+}
+
+.announcements-list p {
+    color: #666; /* Gray color for no announcements message */
+}

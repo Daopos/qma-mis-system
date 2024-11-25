@@ -1,0 +1,20 @@
+.doContainer {
+    background-color: #124076;
+    min-height: 100vh;
+}
+
+.questionContainer {
+    background-color: rgb(247, 247, 249);
+    border-radius: 10px;
+    border: 1px solid rgba(189, 189, 189, 0.5);
+    padding: 20px 15px 30px 15px;
+    box-shadow: rgba(17, 17, 26, 0.05) 0px 1px 0px, rgba(17, 17, 26, 0.1) 0px 0px 8px;
+    width: 100%; /* Ensures the container takes full width in smaller screens */
+    max-width: 600px; /* Set maximum width */
+    margin: 0 auto; /* Center the container */
+}
+.typeContainer {
+    border: 1px solid rgba(189, 189, 189, 0.5);
+    padding: 3px 5px;
+    border-radius: 5px;
+}

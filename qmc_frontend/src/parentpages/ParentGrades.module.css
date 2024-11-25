@@ -1,0 +1,114 @@
+.parentGradeContainer {
+    padding:  30px 60px 0 60px ;
+}
+
+.parentTable {
+    /* border: 1px solid #ccc; */
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+
+    border-collapse: collapse;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    table-layout: fixed;
+  }
+
+  .parentTable caption {
+    font-size: 1.5em;
+    margin: .5em 0 .75em;
+  }
+
+  .parentTable .thDif {
+    background-color: #64A9FB;
+  }
+
+
+.parentTable tr:nth-child(odd) {
+    background-color: #f0f0f0; /* Light gray for odd rows */
+  }
+
+  .parentTable tr:nth-child(even) {
+    background-color: #ffffff; /* White for even rows */
+  }
+
+  .parentTable tr:hover {
+    background-color: #d1e7ff; /* Light blue on hover */
+  }
+
+  .parentTable tr {
+    background-color: #f8f8f8;
+    border: 1px solid #ddd;
+    padding: .35em;
+  }
+
+  .parentTable th,
+  .parentTable td {
+    /* border: 1px solid #ccc; */
+
+    padding: .625em;
+    text-align: center;
+  }
+
+  .parentTable th {
+    font-size: 1.3rem;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    background-color: #124076;
+    color: white;
+  }
+
+  @media screen and (max-width: 600px) {
+    .parentTable {
+      border: 0;
+      box-shadow: none;
+    }
+
+    .parentTable caption {
+      font-size: 1.3em;
+    }
+
+    .parentTable thead {
+      border: none;
+      clip: rect(0 0 0 0);
+      height: 1px;
+      margin: -1px;
+      overflow: hidden;
+      padding: 0;
+      position: absolute;
+      width: 1px;
+    }
+
+    .parentTable tr {
+      border-bottom: 3px solid #ddd;
+      display: block;
+      margin-bottom: .625em;
+    }
+
+    .parentTable td {
+      border-bottom: 1px solid #ddd;
+      display: block;
+      font-size: .8em;
+      text-align: right;
+    }
+
+    .parentTable td::before {
+      /*
+      * aria-label has no advantage, it won't be read inside a table
+      content: attr(aria-label);
+      */
+      content: attr(data-label);
+      float: left;
+      font-weight: bold;
+      text-transform: uppercase;
+    }
+
+    .parentTable td:last-child {
+      border-bottom: 0;
+    }
+
+    .parentGradeContainer {
+        padding:  30px ;
+    }
+  }
+
+

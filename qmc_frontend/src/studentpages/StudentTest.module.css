@@ -1,0 +1,233 @@
+.cardContainer {
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    width: 100%;
+    max-width: 500px;
+    padding: 25px;
+    margin-bottom: 20px;
+    box-shadow: 0px 6px 16px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.cardContainer:hover {
+    transform: translateY(-8px);
+}
+
+.linkContainer {
+    text-decoration: none;
+    color: #3498db;
+    transition: color 0.2s;
+}
+
+.linkContainer:hover {
+    color: #1d6fa5;
+}
+
+.linkContainer h5 {
+    margin-bottom: 10px;
+    font-size: 20px;
+    font-weight: 600;
+    color: #333;
+}
+
+.linkContainer h6 {
+    margin-bottom: 5px;
+    font-size: 16px;
+    font-weight: 500;
+    color: #555;
+}
+
+.linkContainer p {
+    margin-bottom: 15px;
+    font-size: 14px;
+    color: #666;
+}
+
+.linkContainer small {
+    color: #888;
+}
+
+/* Classwork Accordion */
+.accordionItem {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    width: 100%;
+    max-width: 500px;
+    background-color: #fff;
+    position: relative;
+}
+
+.checkedBadge,
+.pendingBadge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    padding: 5px 10px;
+    border-radius: 12px;
+    font-weight: bold;
+    font-size: 0.85rem;
+    color: white;
+}
+
+.checkedBadge {
+    background-color: #28a745; /* Green for checked */
+}
+
+.pendingBadge {
+    background-color: #FF8225; /* Red for pending */
+}
+
+.accordionHeader {
+    background-color: #fdfdfd;
+    border: 1px solid rgba(189, 189, 189, 0.5);
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease-in-out;
+}
+
+.open {
+    color: #28a745 !important; /* Green color for open status */
+}
+
+.close {
+    color: #dc3545 !important; /* Red color for closed status */
+}
+
+
+.accordionHeader:hover {
+    background-color: #f2f2f2;
+}
+
+.accordionBody {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
+    padding: 0 1rem;
+}
+
+.accordionBody.active {
+    max-height: 400px; /* Adjust based on content */
+    padding: 1rem;
+}
+
+.carddContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+    border: 2px dashed #ccc;
+    padding: 20px;
+    text-align: center;
+    margin-top: 10px;
+    border-radius: 5px;
+}
+
+.fileList {
+    margin-top: 10px;
+}
+
+.removeFile {
+    color: red;
+    cursor: pointer;
+    margin-left: 5px;
+}
+
+.text-success {
+    color: #28a745;
+    font-weight: bold;
+}
+
+.wrapList {
+    white-space: normal; /* Allows wrapping */
+    word-wrap: break-word; /* Ensures long words will break */
+    overflow-wrap: break-word; /* Alternative for word-breaking */
+}
+
+/* Stream */
+.streamContainer {
+    display: flex;
+    justify-content: center;
+    padding: 1rem;
+}
+
+.streamColumn {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.streamCard {
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    border-radius: 0.5rem;
+    background-color: #124076;
+    color: white;
+    width: 700px;
+}
+
+.taskContainer {
+    border: 1px solid black;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    display: flex;
+    gap: 0.5rem;
+    width: 700px;
+}
+
+.profileImage {
+    max-width: 50px;
+}
+
+.taskDescription {
+    word-break: break-all;
+    white-space: normal;
+    font-size: 0.9em;
+}
+
+.fileContainer {
+    border: 1px solid black;
+    height: 80px;
+    display: flex;
+    align-items: center;
+}
+
+.filePreview {
+    height: 100%;
+    width: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.fileName, .taskDetails{
+    flex-grow: 1;
+}
+
+
+  @media only screen and (max-width: 770px) {
+    .streamCard {
+        width: 420px;
+    }
+
+    .taskContainer {
+        width: 420px;
+    }
+  }
+  @media only screen and (max-width: 470px) {
+    .accordionItem {
+        width: 100%;
+        max-width: 330px;
+    }
+    .streamCard {
+        width: 320px;
+    }
+
+    .taskContainer {
+        width: 320px;
+    }
+  }

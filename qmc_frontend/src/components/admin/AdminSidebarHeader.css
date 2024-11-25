@@ -1,0 +1,77 @@
+.sidebar {
+    background-color: #124076;
+    min-height: 100vh;
+    width: 12vw;
+    top: 0;
+    /* overflow-y:scroll;
+    overflow-x: hidden; */
+}
+
+.sidebar-active {
+    background-color: white;
+}
+
+.sidebar > div:nth-of-type(1) {
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 50px 0;
+    gap: 6px;
+
+}
+
+.sidebar h2 {
+    font-size: 1.2rem;
+    color: white;
+    font-weight: 500;
+    margin: 0;
+}
+
+.sidebar a {
+    font-size: 1rem;
+    color: white;
+    font-weight: 400;
+    text-decoration: none;
+}
+
+.sidebar-item {
+    border-bottom: solid 1px white;
+    padding: 12px 5px 12px 8px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.header-container {
+    height: 80px;
+    box-shadow: 0 0 5px #333;
+    display: flex;
+    padding: 20px;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.header-container button{
+    color: white;
+    background-color: #761212;
+    border: none;
+    padding: 5px 10px;
+}
+
+.badge {
+    font-size: 0.8rem; /* Adjust font size */
+    padding: 0.25em 0.5em; /* Padding for the badge */
+    border-radius: 0.2rem; /* Optional: Adjust border-radius */
+}
+
+
+@media only screen and (max-width: 1172px) {
+    .sidebar {
+        display: none;
+
+    }
+
+
+
+
+
+  }

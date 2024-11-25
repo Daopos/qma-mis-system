@@ -1,0 +1,86 @@
+.timetableContainer {
+    width: 100%;
+    font-family: sans-serif;
+    padding: 1rem; /* Add padding around the container */
+}
+
+.fc {
+    height: 90vh;
+
+}
+
+.fc .fc-view-harness {
+    border: 1px solid #ccc;
+}
+
+.fc .fc-col-header {
+    font-weight: bold;
+    text-transform: uppercase;
+    padding: 10px; /* Increase padding for better spacing */
+    text-align: center; /* Center header text */
+}
+
+.fc-timegrid-slot {
+    border-bottom: 1px solid #eee; /* Light border between time slots */
+}
+
+.fc-col-header-cell-cushion {
+    text-decoration: none !important;
+
+}
+.fc-event {
+    color: white;
+    border: none;
+    text-align: center;
+    border-radius: 3px; /* Rounded corners */
+    cursor: pointer; /* Change cursor to pointer for interactivity */
+    transition: background-color 0.3s; /* Smooth background transition */
+}
+
+/* .fc-event:hover {
+    background-color: #a53e3e;
+} */
+
+.fc-scrollgrid-sync-inner {
+    background-color: #124076;
+}
+
+.weekdayHeader {
+    font-size: 1rem; /* Increase font size for better readability */
+    text-align: center; /* Center the weekday header */
+    padding: 10px; /* Add padding for spacing */
+    color: white;
+}
+
+/* Media Queries for Responsiveness */
+@media (max-width: 600px) {
+    .timetableContainer {
+        max-width: 100%; /* Full width on small screens */
+        padding: 0.5rem; /* Adjust padding */
+    }
+
+    .fc .fc-col-header {
+        font-size: 0.9rem; /* Smaller font size on small screens */
+    }
+
+    .fc-timegrid-slot {
+        font-size: 0.8rem; /* Smaller font size for time slots */
+        height: 10000px;
+    }
+
+    .fc-event {
+        font-size: 0.4rem; /* Smaller font size for event titles */
+    }
+
+    .weekdayHeader {
+        font-size: 0.6rem; /* Increase font size for better readability */
+        padding: 2px; /* Add padding for spacing */
+    }
+
+    .fc {
+        height: 70vh;
+
+    }
+
+
+}
