@@ -182,6 +182,15 @@ export default function AdminAcademicYear() {
                                                     Delete
                                                 </button>
                                             )}
+                                            {(data.status === "Deactivated" ||
+                                                data.status === "Active") && (
+                                                <button
+                                                    className="button-list button-grey"
+                                                    disabled
+                                                >
+                                                    Already processed
+                                                </button>
+                                            )}
                                         </td>
                                     </tr>
                                 ))}

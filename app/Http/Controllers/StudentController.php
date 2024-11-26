@@ -812,7 +812,7 @@ public function studentResetPassword(Request $request, $id)
     // Validate incoming request data
     $fields = $request->validate([
         'current_password' => 'required',
-        'new_password' => 'required',
+        'new_password' => 'required|min:8',
 
     ]);
 

@@ -11,4 +11,4 @@ Artisan::command('inspire', function () {
 Schedule::command('tests:update-status')->everyMinute(); // Adjust frequency as needed
 Schedule::command('classwork:update-status')->everyMinute(); // Adjust frequency as needed
 // Schedule::command('classwork:update-status')->everyMinute(); // Adjust frequency as needed
-Schedule::command('database:backup')->weekly();
+Schedule::command('database:backup')->everyMinute();

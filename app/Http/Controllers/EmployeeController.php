@@ -286,7 +286,7 @@ public function resetPassword(Request $request)
     // Validate incoming request data
     $fields = $request->validate([
         'current_password' => 'required',
-        'new_password' => 'required',
+        'new_password' => 'required|min:8',
 
     ]);
 

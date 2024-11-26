@@ -661,6 +661,12 @@ export default function AdminEmployeeList() {
                     <Modal.Title>Add Employee</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
+                    <div className="alert alert-warning" role="alert">
+                        <small>
+                            Fields marked with an asterisk (*) are required.
+                        </small>
+                    </div>
+
                     <Form>
                         <Form.Group className="mb-3">
                             <Form.Label>Image</Form.Label>
@@ -722,7 +728,7 @@ export default function AdminEmployeeList() {
                             className="mb-3"
                             controlId="exampleForm.ControlInput1"
                         >
-                            <Form.Label>Extension Name*</Form.Label>
+                            <Form.Label>Extension Name</Form.Label>
                             <Form.Control
                                 ref={extensionRef}
                                 type="text"

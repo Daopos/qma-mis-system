@@ -112,6 +112,11 @@ export default function AdminEmployeeEdit({
                     <Modal.Title>Edit Employee</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
+                    <div className="alert alert-warning" role="alert">
+                        <small>
+                            Fields marked with an asterisk (*) are required.
+                        </small>
+                    </div>
                     <Form>
                         <Form.Group className="mb-3">
                             <Form.Label>Image</Form.Label>

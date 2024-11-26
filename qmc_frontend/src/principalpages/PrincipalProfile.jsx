@@ -4,6 +4,7 @@ import Spinner from "react-bootstrap/Spinner";
 import axiosClientPrincipal from "../axoisclient/axios-client-principal";
 import EditIcon from "@mui/icons-material/Edit";
 import Button from "react-bootstrap/Button";
+import { toast, ToastContainer } from "react-toastify";
 
 export default function PrincipalProfile() {
     const [isEditing, setIsEditing] = useState(null); // Track which field is being edited
@@ -264,6 +265,7 @@ export default function PrincipalProfile() {
                     {renderPasswordReset()}
                 </div>
             </div>
+            <ToastContainer />
         </div>
     );
 }

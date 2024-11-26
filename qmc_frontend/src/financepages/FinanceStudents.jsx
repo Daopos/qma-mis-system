@@ -53,6 +53,8 @@ export default function FinanceStudents() {
 
     const [loading, setLoading] = useState(false);
 
+    const [studentId, setStudentId] = useState("");
+
     const getCountByGrade = () => {
         axiosClientFinance
             .get("/count/finance/students")
@@ -82,6 +84,8 @@ export default function FinanceStudents() {
     };
 
     const showBalanceModal = (id) => {
+        setStudentId(id);
+
         axiosClientFinance
             .get(`/student/balance/${id}`)
             .then(({ data }) => {
@@ -109,7 +113,6 @@ export default function FinanceStudents() {
         axiosClientFinance
             .get(`/student/payment/history/${id}`)
             .then(({ data }) => {
-                console.log(data);
                 setPaymentHistory(data);
             })
             .catch((err) => console.log(err));
@@ -738,7 +741,7 @@ export default function FinanceStudents() {
                         <Button
                             variant="primary"
                             onClick={() => {
-                                payFee(studentFee[0].student_id); // Assuming all fees belong to the same student
+                                payFee(studentId); // Assuming all fees belong to the same student
                                 setIsConfirmed(true);
                             }}
                             disabled={loading}

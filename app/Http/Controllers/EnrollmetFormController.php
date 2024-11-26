@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\EnrollmetForm;
 use App\Http\Requests\StoreEnrollmetFormRequest;
 use App\Http\Requests\UpdateEnrollmetFormRequest;
+use App\Models\Audit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -50,6 +51,12 @@ class EnrollmetFormController extends Controller
 
          if (!$form) {
              $form = EnrollmetForm::create(['files' => null]);
+
+             Audit::create([
+                'user' => auth()->user()->fname . ' ' . (auth()->user()->mname ? auth()->user()->mname . ' ' : '') . auth()->user()->lname,
+                'action' => 'Created new enrollment form.',
+                'user_level' => 'Registrar',
+            ]);
          }
 
          // Add file URL to the response if the file exists
@@ -85,6 +92,12 @@ class EnrollmetFormController extends Controller
 
             // Update the form record with the new file path
             $form->update(['files' => $path]);
+
+            Audit::create([
+                'user' => auth()->user()->fname . ' ' . (auth()->user()->mname ? auth()->user()->mname . ' ' : '') . auth()->user()->lname,
+                'action' => 'Updated enrollment form.',
+                'user_level' => 'Registrar',
+            ]);
         }
 
         return response()->json(['message' => 'Enrollment form updated successfully.', 'form' => $form]);

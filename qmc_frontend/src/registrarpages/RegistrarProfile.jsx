@@ -27,7 +27,6 @@ export default function RegistrarProfile() {
         refetch,
     } = useQuery("studentProfile", async () => {
         const { data } = await axiosClientRegistrar.get("/employee/profile");
-        console.log(data.employee);
         return data.employee;
     });
 

@@ -39,8 +39,7 @@ export default function AdminStudentList() {
     };
 
     const getStudents = () => {
-        axiosClientAdmin.get(`/student/enrolled/`).then(({ data }) => {
-            console.log(data.students);
+        axiosClientAdmin.get(`/student/enrolled`).then(({ data }) => {
             setStudents(data.students);
             setFilteredStudents(data.students);
         });

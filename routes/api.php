@@ -42,8 +42,8 @@ use App\Models\TestSubmission;
 //     return $request->user();
 // })->middleware('auth:sanctum');
 
-Route::get('/enrollment-form', [EnrollmetFormController::class, 'showOrCreate']);
-Route::post('/enrollment-form', [EnrollmetFormController::class, 'update']);
+Route::get('/enrollment-form', [EnrollmetFormController::class, 'showOrCreate'])->middleware('auth:sanctum');
+Route::post('/enrollment-form', [EnrollmetFormController::class, 'update'])->middleware('auth:sanctum');
 
 Route::apiResource('employees', EmployeeController::class);
 Route::apiResource('admins', AdminController::class)->middleware('auth:sanctum');

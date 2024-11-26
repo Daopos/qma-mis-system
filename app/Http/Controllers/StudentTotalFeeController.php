@@ -114,7 +114,12 @@ class StudentTotalFeeController extends Controller
         // Validate the request data
         $request->validate([
             'student_id' => 'required|exists:students,id',
-            'payment' => 'required|numeric|regex:/^\d+(\.\d{1,2})?$/|min:0',
+          'payment' => [
+            'required',
+            'numeric',
+            'regex:/^-?\d+(\.\d{1,2})?$/', // Allows positive and negative values
+        ],
+
             'desc' => 'required'
         ]);
 
@@ -153,9 +158,9 @@ class StudentTotalFeeController extends Controller
         // Calculate the new total fee after payment
         $newTotalFee = $studentTotalFee->total_fee - $paymentAmount;
 
-        if ($newTotalFee < 0) {
-            return response()->json(['error' => 'Payment amount exceeds the total fee'], 400);
-        }
+        // if ($newTotalFee < 0) {
+        //     return response()->json(['error' => 'Payment amount exceeds the total fee'], 400);
+        // }
 
         // Update the total fee
         $studentTotalFee->update(['total_fee' => $newTotalFee]);

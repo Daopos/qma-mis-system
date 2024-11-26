@@ -6,6 +6,7 @@ import axiosClientFinance from "../axoisclient/axios-client-finance";
 import { useQuery } from "react-query";
 import Spinner from "react-bootstrap/Spinner";
 import EditIcon from "@mui/icons-material/Edit";
+import { toast, ToastContainer } from "react-toastify";
 
 export default function FinanceProfile() {
     const [isEditing, setIsEditing] = useState(null); // Track which field is being edited
@@ -93,7 +94,7 @@ export default function FinanceProfile() {
         axiosClientFinance
             .put("/employee/reset/password", payload)
             .then((data) => {
-                alert("Password reset successful!");
+                toast.success("Password reset successful!"); // Success notification
                 setShowPasswordReset(false); // Hide password reset fields after success
             });
     };
@@ -266,6 +267,7 @@ export default function FinanceProfile() {
                     {renderPasswordReset()}
                 </div>
             </div>
+            <ToastContainer />
         </div>
     );
 }

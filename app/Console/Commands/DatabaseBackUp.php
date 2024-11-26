@@ -29,7 +29,7 @@ class DatabaseBackUp extends Command
     public function handle()
     {
         // File name with timestamp
-        $filename = "backup-" . Carbon::now()->format('Y-m-d_H-i-s') . ".gz";
+        $filename = "backup-" . Carbon::now()->format('Y-m-d_H-i-s') . ".sql";
         $path = storage_path("app/backup/{$filename}");
 
         // Ensure the backup directory exists
@@ -37,21 +37,32 @@ class DatabaseBackUp extends Command
             mkdir(storage_path('app/backup'), 0755, true);
         }
 
-        // MySQL dump command
+        // Set MYSQL_PWD if needed, otherwise, skip password in the command
+        if (env('DB_PASSWORD')) {
+            putenv('MYSQL_PWD=' . env('DB_PASSWORD'));
+        }
+
+        // Prepare the mysqldump command for a .sql backup (no gzip compression)
         $command = sprintf(
-            'mysqldump --user=%s --password=%s --host=%s --port=%s --databases %s --skip-lock-tables --column-statistics=0 > %s',
-            escapeshellarg(env('DB_USERNAME')),
-            escapeshellarg(env('DB_PASSWORD')),
-            escapeshellarg(env('DB_HOST')),
+            'mysqldump --user=%s --host=%s --port=%s --databases %s --skip-lock-tables --no-tablespaces --column-statistics=0 > %s',
+            escapeshellarg(env('DB_USERNAME', 'root')), // Default to 'root' if not set
+            escapeshellarg(env('DB_HOST', '127.0.0.1')),
             escapeshellarg(env('DB_PORT', 3306)),
             escapeshellarg(env('DB_DATABASE')),
             escapeshellarg($path)
         );
 
-        // Execute the command and capture output
+        // Output the command being executed (for debugging)
+        $this->info("Command: $command");
+
+        // Execute the command and capture the output
         $output = [];
         $returnVar = null;
         exec($command . ' 2>&1', $output, $returnVar);
+
+        // Output the return code and any error messages
+        $this->info("Return code: $returnVar");
+        $this->info("Output: " . implode("\n", $output));
 
         // Handle success or failure
         if ($returnVar === 0) {

@@ -401,6 +401,7 @@ export default function RegistrarNewStudent() {
 
                 <div className="d-flex flex-wrap justify-content-between pb-3">
                     <h1>APPLICATION FOR ENROLLMENT</h1>
+
                     <div className="d-flex align-items-center gap-3">
                         <Form.Group className="mb-0">
                             <Form.Select ref={gradelevelRef}>
@@ -435,7 +436,11 @@ export default function RegistrarNewStudent() {
                         </Button>
                     </div>
                 </div>
-
+                <div className="alert alert-warning" role="alert">
+                    <small>
+                        Fields marked with an asterisk (*) are required.
+                    </small>
+                </div>
                 <Form>
                     <Tabs
                         defaultActiveKey="home"
