@@ -64,6 +64,13 @@ export default function PdfClassStudent() {
     return (
         <div>
             <div ref={pdfRef}>
+                <div className="d-flex justify-content-center gap-2 p-4">
+                    <img src="/public/img/logo.png" alt="" width={100} />
+                    <div className="d-flex flex-column justify-content-center align-items-center">
+                        <h3>QUEZON MEMORIAL ACADEMY</h3>
+                        <h6>Umingan, Pangasinan</h6>
+                    </div>
+                </div>
                 <Container>
                     <Row>
                         <Col className="text-center">
@@ -87,15 +94,17 @@ export default function PdfClassStudent() {
                                         <tr key={index}>
                                             <td>{index + 1}</td>
                                             <td>{data.student.lrn}</td>
-                                            <td>{`${data.student.surname}${
-                                                data.student.extension_name
-                                                    ? ` ${data.student.extension_name}`
-                                                    : ""
-                                            }, ${data.student.firstname}${
+                                            <td>{`${data.student.surname}, ${
+                                                data.student.firstname
+                                            }${
                                                 data.student.middlename
                                                     ? `, ${data.student.middlename.charAt(
                                                           0
                                                       )}.`
+                                                    : ""
+                                            }${
+                                                data.student.extension_name
+                                                    ? ` ${data.student.extension_name}`
                                                     : ""
                                             }`}</td>
                                             <td>{data.student.gender}</td>

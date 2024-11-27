@@ -17,6 +17,7 @@ import { useReactToPrint } from "react-to-print";
 import FinanceReceipt from "../components/finance/FinanceReceipt";
 import Dropdown from "react-bootstrap/Dropdown";
 import DropdownButton from "react-bootstrap/DropdownButton";
+import { useQuery } from "react-query";
 
 export default function FinanceStudents() {
     const [students, setStudents] = useState([]);
@@ -54,6 +55,18 @@ export default function FinanceStudents() {
     const [loading, setLoading] = useState(false);
 
     const [studentId, setStudentId] = useState("");
+
+    const {
+        data: profile = {},
+        isLoading,
+        isError,
+        refetch,
+    } = useQuery("financeProfiletest", async () => {
+        const { data } = await axiosClientFinance.get("/employee/profile");
+        console.log(data.employee);
+
+        return data.employee;
+    });
 
     const getCountByGrade = () => {
         axiosClientFinance
@@ -225,12 +238,26 @@ export default function FinanceStudents() {
                         {studentsToRender.map((data, index) => (
                             <tr key={index + 1}>
                                 {/* Adjust index to reflect the correct number based on the page */}
-                                <td>{startIndex + index + 1}</td>
-                                <td>{data.lrn}</td>
-                                <td>{`${data.surname}, ${data.firstname}`}</td>
-                                <td>{data.grade_level}</td>
-                                <td>{data.gender}</td>
-                                <td>
+                                <td data-label="No">
+                                    {startIndex + index + 1}
+                                </td>
+                                <td data-label="LRN">{data.lrn}</td>
+                                <td data-label="Name">{`${data.surname}, ${
+                                    data.firstname
+                                }${
+                                    data.middlename
+                                        ? `, ${data.middlename.charAt(0)}.`
+                                        : ""
+                                }${
+                                    data.extension_name
+                                        ? ` ${data.extension_name}`
+                                        : ""
+                                }`}</td>
+                                <td data-label="Grade LEvle">
+                                    {data.grade_level}
+                                </td>
+                                <td data-label="Male">{data.gender}</td>
+                                <td data-label="Option">
                                     {/* Render buttons and other elements as before */}
                                     <OverlayTrigger
                                         key="top1"
@@ -780,6 +807,20 @@ export default function FinanceStudents() {
                         payAmounts={payAmount}
                         desc={description}
                         balance={calculateBalance()}
+                        financeName={`${profile.lname}, ${profile.fname} ${
+                            profile.mname ? profile.mname.charAt(0) + "." : ""
+                        }${
+                            profile.extension_name
+                                ? " " + profile.extension_name
+                                : ""
+                        }`}
+                        studentName={`${studentFeeDetails.surname}, ${
+                            studentFeeDetails.firstname
+                        }${
+                            studentFeeDetails.middlename
+                                ? `, ${studentFeeDetails.middlename.charAt(0)}.`
+                                : "."
+                        }`}
                     />
                     <button
                         onClick={printReceipt}

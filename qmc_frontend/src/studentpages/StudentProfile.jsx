@@ -287,7 +287,10 @@ export default function StudentProfile() {
                             </h6>
                         </div>
                         <div>
-                            : &nbsp;&nbsp;&nbsp;&nbsp;{profile?.track || "N/A"}
+                            &nbsp;&nbsp;&nbsp;&nbsp;
+                            {profile?.track === "null"
+                                ? "N/A"
+                                : profile?.track || "N/A"}
                         </div>
                     </div>
                     <div className="d-flex flex-lg-row flex-sm-row flex-md-row flex-column gap-2 gap-lg-0 gap-md-0 gap-sm-0">

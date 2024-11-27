@@ -217,18 +217,14 @@ class StudentController extends Controller
             'guardian_social' => 'nullable|string|max:255',
             'mother_email' => [
                 'nullable',
-                'email',
                 'max:255',
-                Rule::unique('students', 'mother_email')->ignore($student->id), // Exclude current student's mother email
             ],
             'father_email' => [
                 'nullable',
-                'email',
                 'max:255',
-                Rule::unique('students', 'father_email')->ignore($student->id), // Exclude current student's father email
             ],
             'guardian_email' => [
-                'nullable',
+                'required',
                 'email',
                 'max:255',
                 Rule::unique('guardians', 'email')->ignore($student->id, 'student_id'), // Exclude current guardian's email
@@ -279,6 +275,16 @@ class StudentController extends Controller
             // Optionally, you can create a new guardian:
             // Guardian::create(['student_id' => $student->id, 'email' => $fields['guardian_email']]);
         }
+
+        $registrar = auth()->user(); // Assuming you're using Sanctum for authentication
+
+        // Log an audit entry for the student registration
+        Audit::create([
+            'user' => $registrar->fname . ' ' . ($registrar->mname ? $registrar->mname . ' ' : '') . $registrar->lname,
+            'action' => 'Edited student: ' . $student->firstname . ' ' . $student->surname . ' (Grade Level: ' . $student->grade_level . ')',
+            'user_level' => 'Registrar',
+        ]);
+
     }
 
     /**
@@ -435,12 +441,12 @@ class StudentController extends Controller
         'mother_occupation' => 'required|string|max:255',
         'mother_contact' => 'required|numeric|digits:11',
         'mother_social' => 'nullable|string|max:255',
-        'guardian_name' => 'nullable|string|max:255',
+        'guardian_name' => 'required|string|max:255',
         'guardian_occupation' => 'required|string|max:255',
         'guardian_contact' => 'required|numeric|digits:11',
         'guardian_social' => 'nullable|string|max:255',
-        'mother_email' => 'required|email|max:255|unique:students,mother_email',
-        'father_email' => 'required|email|max:255|unique:students,father_email',
+        'mother_email' => 'nullable|email|max:255',
+        'father_email' => 'nullable|email|max:255',
         'guardian_email' => 'required|email|max:255|unique:guardians,email',
         'previous_school_name' => 'required|string|max:255',
         'previous_school_address' => 'required|string|max:255',
@@ -914,6 +920,7 @@ public function studentResetPassword(Request $request, $id)
                 'grade_level' => 'required|string|max:255',
                 'student_fee' => 'nullable|string|max:255',
             ]);
+
 
             // Fetch the student's current grade level
             $currentGradeLevel = $student->grade_level;

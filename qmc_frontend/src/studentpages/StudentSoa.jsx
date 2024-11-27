@@ -91,7 +91,7 @@ export default function StudentSoa() {
                         fontWeight: "bold",
                     }}
                 >
-                    ₱{balance.toLocaleString()}
+                    ₱{balance?.toLocaleString() || "0"}
                 </h3>
             </div>
 

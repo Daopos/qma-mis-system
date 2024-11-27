@@ -15,6 +15,8 @@ import EditIcon from "@mui/icons-material/EditOutlined";
 import { useNavigate, useParams } from "react-router-dom";
 import ConfirmationLoad from "../components/ConfirmationLoad";
 
+import { ToastContainer, toast } from "react-toastify";
+
 export default function TeacherTestCreation() {
     const [mcModal, setMCModal] = useState(false);
     const [ifModal, setIFModal] = useState(false);
@@ -128,6 +130,7 @@ export default function TeacherTestCreation() {
             })
             .catch((err) => {
                 console.log(err);
+                toast.error("Error Occurred");
             })
             .finally(() => setLoading(false));
     };
@@ -366,6 +369,7 @@ export default function TeacherTestCreation() {
                 }
                 loading={loading}
             />
+            <ToastContainer />
         </>
     );
 }

@@ -137,6 +137,7 @@ export default function TeacherSubject() {
                                         style={{
                                             color: "white",
                                             fontWeight: "bold",
+                                            textAlign: "center",
                                         }}
                                     >
                                         {data.title}

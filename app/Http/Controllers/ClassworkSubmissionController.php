@@ -57,7 +57,7 @@ class ClassworkSubmissionController extends Controller
 {
     // Validate the request
     $validatedData = $request->validate([
-        'files.*' => 'nullable|file|mimes:jpg,png,pdf,docx,txt,zip|max:2048', // Adjust as needed
+        'files.*' => 'nullable|file|mimes:jpg,png,pdf,docx,txt,zip|max:10048', // Adjust as needed
         'score' => 'nullable|integer',
     ]);
 

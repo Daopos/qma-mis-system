@@ -52,28 +52,38 @@ class ClassroomController extends Controller
      */
     public function store(Request $request)
     {
-        //
-
+        // Validate input
         $fields = $request->validate([
             'title' => 'required',
             'grade_level' => 'required',
             'adviser_id' => 'nullable|integer'
         ]);
 
+        // Check if adviser already has an advisory classroom
+        if ($request->adviser_id) {
+            $existingClassroom = Classroom::where('adviser_id', $request->adviser_id)->first();
+            if ($existingClassroom) {
+                return response()->json(['message' => 'This adviser is already assigned to another classroom.'], 400);
+            }
+        }
+
+        // Create the classroom
         $classroom = Classroom::create($fields);
+
         // Fetch the user performing the action
-    $user = auth()->user();
-    $userFullName = $user->fname . ' ' . ($user->mname ? $user->mname[0] . '. ' : '') . $user->lname;
+        $user = auth()->user();
+        $userFullName = $user->fname . ' ' . ($user->mname ? $user->mname[0] . '. ' : '') . $user->lname;
 
-    // Log the creation in the audit table
-    Audit::create([
-        'user' => $userFullName,
-        'action' => "Created classroom '{$classroom->title}' for grade level '{$classroom->grade_level}'",
-        'user_level' => 'Principal', // Adjust as needed based on user roles
-    ]);
+        // Log the creation in the audit table
+        Audit::create([
+            'user' => $userFullName,
+            'action' => "Created classroom '{$classroom->title}' for grade level '{$classroom->grade_level}'",
+            'user_level' => 'Principal', // Adjust as needed based on user roles
+        ]);
 
-    return response()->json(['message' => 'Classroom created successfully!', 'classroom' => $classroom], 201);
+        return response()->json(['message' => 'Classroom created successfully!', 'classroom' => $classroom], 201);
     }
+
 
     /**
      * Display the specified resource.
@@ -96,6 +106,14 @@ class ClassroomController extends Controller
             'adviser_id' => 'nullable|integer',
         ]);
 
+
+    // Check if the adviser_id is being changed
+    if (isset($fields['adviser_id']) && $fields['adviser_id'] != $classroom->adviser_id) {
+        // Check if the new adviser is already assigned to another classroom
+        if (Classroom::where('adviser_id', $fields['adviser_id'])->exists()) {
+            return response()->json(['message' => 'The selected adviser is already assigned to another classroom.'], 400);
+        }
+    }
         // Capture the original classroom details before the update
         $originalDetails = $classroom->only(['title', 'grade_level', 'adviser_id']);
 

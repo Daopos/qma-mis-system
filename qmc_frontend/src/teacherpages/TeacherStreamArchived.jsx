@@ -21,6 +21,8 @@ import { ToastContainer, toast } from "react-toastify";
 import Spinner from "react-bootstrap/Spinner";
 import { useQuery } from "react-query";
 
+import studenttestCSS from "./TeacherStream.module.css";
+
 export default function TeacherStreamArchived() {
     const [Stoggle, setStoggle] = useState(false);
     const [file, setFile] = useState(null);
@@ -140,18 +142,6 @@ export default function TeacherStreamArchived() {
         }
     };
 
-    const getSubject = async () => {
-        try {
-            const { data } = await axiosClientTeacher.get(
-                `/subjects/${subjectId}`
-            );
-            console.log(data);
-            setSubject(data);
-        } catch (err) {
-            console.log(err);
-        }
-    };
-
     useEffect(() => {
         if (subjectData) {
             setSubject(subjectData);
@@ -172,110 +162,8 @@ export default function TeacherStreamArchived() {
         }
     };
 
-    // Determine the icon based on file type
-    const getFileIcon = (fileType) => {
-        if (fileType.includes("image")) {
-            // Check if it's an image file type
-            return (
-                <img
-                    src={URL.createObjectURL(file)}
-                    alt="Uploaded Image"
-                    style={{ height: "100%", width: "auto" }}
-                />
-            );
-        } else if (fileType.includes("pdf")) {
-            return <PictureAsPdfIcon fontSize="large" />;
-        } else if (
-            fileType.includes("presentation") ||
-            fileType.includes("ppt")
-        ) {
-            return <SlideshowIcon fontSize="large" />;
-        } else if (fileType.includes("word") || fileType.includes("document")) {
-            return <DescriptionIcon fontSize="large" />;
-        } else {
-            return <DriveFolderUploadIcon fontSize="large" />; // Default icon for unsupported types
-        }
-    };
-
     const handleStoggle = () => {
         setStoggle(!Stoggle);
-    };
-
-    // Function to remove the attached file
-    const handleRemoveFile = () => {
-        setFile(null);
-        setFileInfo({ name: "", type: "" });
-    };
-
-    // Function to submit data using axios
-    const handleSubmit = async () => {
-        if (!title || !description) {
-            alert("Please fill all fields and upload a file.");
-            return;
-        }
-
-        // Create FormData object
-        const formData = new FormData();
-
-        if (file) {
-            formData.append("file", file);
-        }
-        formData.append("title", title);
-        formData.append("description", description);
-        formData.append("subject_id", subjectId);
-
-        try {
-            // Send POST request using axios
-            const response = await axiosClientTeacher
-                .post("/tasks", formData, {
-                    headers: {
-                        "Content-Type": "multipart/form-data",
-                    },
-                })
-                .then(() => {
-                    console.log("success");
-                    handleStoggle();
-                    refetch();
-                    getTasks();
-                    setFile(null);
-                    setFileInfo({ name: "", type: "" });
-                    setTitle("");
-                    setDescription("");
-                    setEditingTaskId(null);
-                    toast.success("Created successfully");
-                })
-                .catch((err) => {
-                    const response = err.response;
-
-                    if (response && response.status === 422) {
-                        const dataErrors = response.data.errors;
-                        console.log(dataErrors);
-
-                        let errorMessage = "";
-                        // Loop through each field's errors and concatenate them into a single message
-                        Object.keys(dataErrors).forEach((field) => {
-                            dataErrors[field].forEach((message) => {
-                                errorMessage += `${message}\n`;
-                            });
-                        });
-
-                        if (!toast.isActive(toastId)) {
-                            const id = toast.error(errorMessage.trim());
-                            setToastId(id);
-                        }
-                    } else {
-                        console.log(response);
-                    }
-                });
-
-            // Handle successful response
-            console.log("File uploaded successfully:", response.data);
-
-            // Reset form fields
-        } catch (error) {
-            // Handle error response
-            console.error("Error uploading file:", error);
-        }
     };
 
     const formatDateTime = (datetime) => {
@@ -423,16 +311,9 @@ export default function TeacherStreamArchived() {
     }
     return (
         <>
-            <div className="d-flex justify-content-center p-3">
-                <div className="d-flex flex-column gap-3">
-                    <div
-                        className="p-4 d-flex flex-column gap-2 rounded"
-                        style={{
-                            backgroundColor: "#124076",
-                            color: "White",
-                            width: "700px",
-                        }}
-                    >
+            <div className={studenttestCSS.streamContainer}>
+                <div className={studenttestCSS.streamColumn}>
+                    <div className={studenttestCSS.streamCard}>
                         <h1>{subject.title}</h1>
                         <h4>
                             {`Grade ${subject.classroom?.grade_level || ""} - ${
@@ -460,7 +341,7 @@ export default function TeacherStreamArchived() {
 
                     {tasks.map((data) => (
                         <div
-                            className="border border-dark p-2 rounded d-flex gap-2"
+                            className={studenttestCSS.taskContainer}
                             style={{ width: "700px" }}
                             key={data.id}
                         >

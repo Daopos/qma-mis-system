@@ -156,6 +156,9 @@ export default function TeacherQuiz() {
                 show={confirm}
                 onHide={handleCloseDelete}
                 confirm={deleteTest}
+                title={
+                    "Deleting this question will permanently remove it from the assessment. This action cannot be undone. Are you sure you want to proceed?"
+                }
             />
 
             <ToastContainer />

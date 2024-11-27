@@ -471,6 +471,10 @@ export default function AdminEmployeeList() {
                                                               0
                                                           )}.`
                                                         : ""
+                                                }${
+                                                    data.extension_name
+                                                        ? ` ${data.extension_name}`
+                                                        : ""
                                                 }`}
                                             </td>
                                             <td data-label="Address ">

@@ -10,8 +10,7 @@ import { ToastContainer, toast } from "react-toastify";
 import { useStateContext } from "../context/ContextProvider";
 
 export default function AdminProfile() {
-    const { user, token } = useStateContext();
-    const [toastId, setToastId] = useState(null);
+    const { user } = useStateContext();
     const [show, setShow] = useState(false);
 
     const newEmailRef = useRef();
@@ -24,35 +23,43 @@ export default function AdminProfile() {
 
     const onSubmit = () => {
         const payload = {
-            new_username: newUsernameRef.current.value,
-            email: newEmailRef.current.value,
+            new_username: newUsernameRef.current.value || null,
+            email: newEmailRef.current.value || null,
             current_password: currentPasswordRef.current.value,
-            new_password: newPasswordRef.current.value,
+            new_password: newPasswordRef.current.value || null,
         };
 
         axiosClientAdmin
-            .put(`/admins/${user.id}`, payload)
+            .put(`/admin/reset`, payload)
             .then(() => {
+                toast.success("Your profile has been updated successfully!", {
+                    autoClose: 3000,
+                });
                 handleClose();
             })
             .catch((err) => {
                 const response = err.response;
 
                 if (response && response.status === 422) {
-                    const dataError = response.data.errors;
-                    console.log(dataError);
-                    if (!toast.isActive(toastId)) {
-                        const id = toast.error(
-                            "Email Address, New Username, Current Password, and New Password need to be filled out."
+                    // Display validation errors
+                    const errors = response.data.errors;
+                    Object.entries(errors).forEach(([field, messages]) => {
+                        toast.error(
+                            `${field.replace("_", " ")}: ${messages[0]}`,
+                            { autoClose: 3000 }
                         );
-                        setToastId(id);
-                    }
+                    });
+                } else if (response && response.status === 403) {
+                    toast.error("Current password is incorrect.", {
+                        autoClose: 3000,
+                    });
                 } else {
-                    console.log(response.data);
-                    if (!toast.isActive(toastId)) {
-                        const id = toast.error(response.data.error.toString());
-                        setToastId(id);
-                    }
+                    toast.error(
+                        "An unexpected error occurred. Please try again.",
+                        {
+                            autoClose: 3000,
+                        }
+                    );
                 }
             });
     };
@@ -65,7 +72,11 @@ export default function AdminProfile() {
 
                     <div className="input-container">
                         <label htmlFor="">Username</label>
-                        <input type="text" disabled value={"*****"} />
+                        <input
+                            type="text"
+                            disabled
+                            value={user?.username || "*****"}
+                        />
                     </div>
 
                     <div className="input-container">
@@ -82,53 +93,42 @@ export default function AdminProfile() {
                 </Modal.Header>
                 <Modal.Body>
                     <Form>
-                        <Form.Group
-                            className="mb-3"
-                            controlId="exampleForm.ControlInput1"
-                        >
-                            <Form.Label>New Email address*</Form.Label>
+                        <Form.Group className="mb-3" controlId="newEmail">
+                            <Form.Label>New Email Address</Form.Label>
                             <Form.Control
                                 ref={newEmailRef}
                                 type="email"
                                 placeholder="name@example.com"
-                                autoFocus
+                            />
+                        </Form.Group>
+
+                        <Form.Group className="mb-3" controlId="newUsername">
+                            <Form.Label>New Username</Form.Label>
+                            <Form.Control
+                                ref={newUsernameRef}
+                                type="text"
+                                placeholder="Ex. Abc"
                             />
                         </Form.Group>
 
                         <Form.Group
                             className="mb-3"
-                            controlId="exampleForm.ControlInput1"
+                            controlId="currentPassword"
                         >
-                            <Form.Label>New Username*</Form.Label>
-                            <Form.Control
-                                ref={newUsernameRef}
-                                type="text"
-                                placeholder="Ex. Abc"
-                                autoFocus
-                            />
-                        </Form.Group>
-                        <Form.Group
-                            className="mb-3"
-                            controlId="exampleForm.ControlInput1"
-                        >
-                            <Form.Label>Current Password*</Form.Label>
+                            <Form.Label>Current Password</Form.Label>
                             <Form.Control
                                 ref={currentPasswordRef}
                                 type="password"
-                                placeholder="Ex. password"
-                                autoFocus
+                                placeholder="Enter your current password"
                             />
                         </Form.Group>
-                        <Form.Group
-                            className="mb-3"
-                            controlId="exampleForm.ControlInput1"
-                        >
-                            <Form.Label>New Password*</Form.Label>
+
+                        <Form.Group className="mb-3" controlId="newPassword">
+                            <Form.Label>New Password</Form.Label>
                             <Form.Control
                                 ref={newPasswordRef}
                                 type="password"
-                                placeholder="Ex. ABC"
-                                autoFocus
+                                placeholder="Enter a new password"
                             />
                         </Form.Group>
                     </Form>
@@ -139,7 +139,7 @@ export default function AdminProfile() {
                     </Button>
                 </Modal.Footer>
             </Modal>
-            <ToastContainer limit={1} />
+            <ToastContainer limit={3} />
         </>
     );
 }

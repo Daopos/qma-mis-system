@@ -6,7 +6,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer, toast } from "react-toastify";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
-import Confirmation from "../components/Confirmation";
+import ConfirmationLoad from "../components/ConfirmationLoad";
 
 export default function AdminEmpoyeeArchive() {
     const [employees, setEmployees] = useState([]);
@@ -24,6 +24,8 @@ export default function AdminEmpoyeeArchive() {
     const [DeleteId, setDeleteId] = useState(null);
 
     const searchRef = useRef();
+
+    const [buttonLoading, setButtonLoading] = useState(false);
 
     const getEmployees = () => {
         axiosClientAdmin.get("/employee/archive").then(({ data }) => {
@@ -102,6 +104,7 @@ export default function AdminEmpoyeeArchive() {
     };
 
     const recoverEmployee = (id) => {
+        setButtonLoading(true);
         axiosClientAdmin
             .get(`/employee/recover/${RecoverId}`)
             .then(() => {
@@ -111,7 +114,8 @@ export default function AdminEmpoyeeArchive() {
             })
             .catch(() => {
                 console.log("error");
-            });
+            })
+            .finally(() => setButtonLoading(false));
     };
 
     const handleShowDelete = (id) => {
@@ -124,6 +128,8 @@ export default function AdminEmpoyeeArchive() {
         setDeleteId(null);
     };
     const deleteEmployee = () => {
+        setButtonLoading(true);
+
         axiosClientAdmin
             .delete(`/employees/${DeleteId}`)
             .then(() => {
@@ -132,7 +138,8 @@ export default function AdminEmpoyeeArchive() {
             })
             .catch(() => {
                 console.log("error");
-            });
+            })
+            .finally(() => setButtonLoading(false));
     };
 
     // Sort employees by column
@@ -372,20 +379,24 @@ export default function AdminEmpoyeeArchive() {
             </div>
             <ToastContainer limit={1} />
 
-            <Confirmation
+            <ConfirmationLoad
                 show={showRecover}
                 onHide={handleCloseRecover}
                 confirm={recoverEmployee}
                 title={
                     "Recovering this employee will reactivate their account and restore access to all system features. Ensure that their role, permissions, and any required updates are reviewed to reflect current organizational needs before completing the recovery process."
                 }
+                loading={buttonLoading}
             />
 
-            <Confirmation
+            <ConfirmationLoad
                 show={showDelete}
                 onHide={handleCloseDelete}
                 confirm={deleteEmployee}
-                title={""}
+                title={
+                    "Permanently deleting this employee will remove their account and all associated data from the system. This action cannot be undone. Ensure that any necessary data has been reviewed, exported, or reassigned before proceeding with the deletion."
+                }
+                loading={buttonLoading}
             />
         </>
     );

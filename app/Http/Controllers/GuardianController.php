@@ -101,7 +101,7 @@ class GuardianController extends Controller
     // Validate incoming request data
     $fields = $request->validate([
         'current_password' => 'required',
-        'new_password' => 'required',
+        'new_password' => 'required|min:8',
     ]);
 
     // Check if the current password matches the one stored in the database

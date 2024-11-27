@@ -99,13 +99,15 @@ export default function TeacherAdvisory() {
                                             index +
                                             1}
                                     </td>
-                                    <td data-label="Name">{`${data.surname}${
-                                        data.extension_name
-                                            ? ` ${data.extension_name}`
-                                            : ""
-                                    }, ${data.firstname}${
+                                    <td data-label="Name">{`${data.surname}, ${
+                                        data.firstname
+                                    }${
                                         data.middlename
                                             ? `, ${data.middlename.charAt(0)}.`
+                                            : ""
+                                    }${
+                                        data.extension_name
+                                            ? ` ${data.extension_name}`
                                             : ""
                                     }`}</td>
                                     <td data-label="LRN">{data.lrn}</td>

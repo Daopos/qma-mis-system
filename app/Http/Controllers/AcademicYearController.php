@@ -366,7 +366,9 @@ public function makeAcademicYearActive(Request $request)
 
 public function getArchivedAcademiicYear() {
 
-    $academic_year = AcademicYear::where('status', 'Deactivated')->get();
+    $academic_year = AcademicYear::where('status', 'Deactivated')
+    ->orderBy('created_at', 'desc')
+    ->get();
 
     return response()->json($academic_year);
 }

@@ -5,6 +5,7 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
 import Spinner from "react-bootstrap/Spinner"; // Import Spinner
+import { toast, ToastContainer } from "react-toastify";
 
 export default function TeacherStudent() {
     const { subjectId } = useParams(); // Get the subjectId from the URL
@@ -77,12 +78,15 @@ export default function TeacherStudent() {
         axiosClientTeacher
             .post("/teacher/make/grade", payload)
             .then(() => {
-                console.log("Grade saved successfully");
+                toast.success("Grade saved successfully!"); // Success toast
                 handleClose();
                 getStudents(); // Refresh the student list to show updated grades
             })
             .catch((err) => {
                 console.error(err);
+                toast.error(
+                    "An error occurred while saving the grade. Please try again."
+                ); // Error toast
             });
     };
 
@@ -125,15 +129,15 @@ export default function TeacherStudent() {
                                         <td data-label="lrn">{data.lrn}</td>
                                         <td data-label="name">{`${
                                             data.surname
-                                        }${
-                                            data.extension_name
-                                                ? ` ${data.extension_name}`
-                                                : ""
                                         }, ${data.firstname}${
                                             data.middlename
                                                 ? `, ${data.middlename.charAt(
                                                       0
                                                   )}.`
+                                                : ""
+                                        }${
+                                            data.extension_name
+                                                ? ` ${data.extension_name}`
                                                 : ""
                                         }`}</td>
                                         <td data-label="gender">
@@ -251,6 +255,7 @@ export default function TeacherStudent() {
                     </Button>
                 </Modal.Footer>
             </Modal>
+            <ToastContainer />
         </>
     );
 }

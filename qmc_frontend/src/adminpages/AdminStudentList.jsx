@@ -97,13 +97,13 @@ export default function AdminStudentList() {
                         <tr key={index}>
                             <td>{index + 1}</td>
                             <td>{data.lrn}</td>
-                            <td>{`${data.surname}${
-                                data.extension_name
-                                    ? ` ${data.extension_name}`
-                                    : ""
-                            }, ${data.firstname}${
+                            <td>{`${data.surname}, ${data.firstname}${
                                 data.middlename
                                     ? `, ${data.middlename.charAt(0)}.`
+                                    : ""
+                            }${
+                                data.extension_name
+                                    ? ` ${data.extension_name}`
                                     : ""
                             }`}</td>
                             <td>{data.grade_level}</td>
@@ -113,7 +113,10 @@ export default function AdminStudentList() {
                                     key="top"
                                     placement="top"
                                     overlay={
-                                        <Tooltip id="tooltip-top">
+                                        <Tooltip
+                                            id="tooltip-top"
+                                            style={{ position: "fixed" }}
+                                        >
                                             View Student Info
                                         </Tooltip>
                                     }

@@ -18,6 +18,7 @@ import Tabs from "react-bootstrap/Tabs";
 
 import IconButton from "@mui/material/IconButton";
 import EditIcon from "@mui/icons-material/Edit";
+import ConfirmationLoad from "../components/ConfirmationLoad";
 
 export default function RegistrarNewStudent() {
     const [toastId, setToastId] = useState(null);
@@ -76,6 +77,12 @@ export default function RegistrarNewStudent() {
     const [barangayAddr, setBarangayAddr] = useState("");
 
     const [_loading, setLoading] = useState(false);
+
+    const [handleShow, setHandleShow] = useState(false);
+
+    const hanldeClose = () => {
+        setHandleShow(false);
+    };
 
     const getFileUrl = () => {
         axiosClientRegistrar.get("/download/form").then(({ data }) => {
@@ -221,6 +228,15 @@ export default function RegistrarNewStudent() {
             .post("/students", formData)
             .then((response) => {
                 toast.success("Successfully added");
+                setBarangayAddr("");
+                setCityAddr("");
+                setProvinceAddr("");
+                setRegionAddr("");
+
+                // Resetting address dropdown values
+                provinceRef.current.value = "";
+                municipalityRef.current.value = "";
+                barangayRef.current.value = "";
 
                 // Clear input fields
                 lrnRef.current.value = "";
@@ -231,8 +247,6 @@ export default function RegistrarNewStudent() {
                 mnameRef.current.value = "";
                 suffixRef.current.value = "";
                 streetRef.current.value = "";
-                setBarangayAddr("");
-                setCityAddr("");
                 birthdateRef.current.value = "";
                 birthNationalityRef.current.value = "";
                 birthMunicipalityRef.current.value = "";
@@ -254,6 +268,10 @@ export default function RegistrarNewStudent() {
                 guardianoccupationRef.current.value = "";
                 guardiancontactRef.current.value = "";
                 guardiansocialRef.current.value = "";
+                guardianemailRef.current.value = "";
+                fatheremailRef.current.value = "";
+                motheremailRef.current.value = "";
+
                 previousschoolnameRef.current.value = "";
                 previousschooladdressRef.current.value = "";
 
@@ -262,6 +280,8 @@ export default function RegistrarNewStudent() {
                 reportcardRef.current.checked = false;
                 transcriptRef.current.checked = false;
                 goodmoralRef.current.checked = false;
+
+                hanldeClose();
             })
             .catch((err) => {
                 const response = err.response;
@@ -416,7 +436,7 @@ export default function RegistrarNewStudent() {
                         </Form.Group>
                         <Button
                             className="button-list button-blue border-0 p-3"
-                            onClick={onSubmit}
+                            onClick={() => setHandleShow(true)}
                             disabled={_loading}
                         >
                             {_loading ? (
@@ -453,7 +473,7 @@ export default function RegistrarNewStudent() {
                             <div className="d-flex flex-wrap gap-5 border p-3 border-2  rounded">
                                 <Form.Group className="mb-0">
                                     <Form.Label>
-                                        LRN
+                                        LRN*
                                         {/* <ErrorIcon color="red" /> */}
                                     </Form.Label>
                                     <Form.Control
@@ -484,7 +504,7 @@ export default function RegistrarNewStudent() {
                             <h3 className="mt-4">NAME OF STUDENT:</h3>
                             <div className="d-flex flex-wrap gap-5 border p-3 border-2 rounded">
                                 <Form.Group className="mb-3">
-                                    <Form.Label>SURNAME</Form.Label>
+                                    <Form.Label>SURNAME*</Form.Label>
                                     <Form.Control
                                         type="text"
                                         placeholder="Ex. Dela Cruz"
@@ -492,7 +512,7 @@ export default function RegistrarNewStudent() {
                                     />
                                 </Form.Group>
                                 <Form.Group className="mb-3">
-                                    <Form.Label>First Name</Form.Label>
+                                    <Form.Label>First Name*</Form.Label>
                                     <Form.Control
                                         type="text"
                                         placeholder="Ex. Juan"
@@ -519,7 +539,7 @@ export default function RegistrarNewStudent() {
                             <h3 className="mt-4">HOME ADDRESS:</h3>
                             <div className="d-flex flex-wrap gap-5 border p-3 border-2 rounded">
                                 <Form.Group className="mb-3">
-                                    <Form.Label>Region</Form.Label>
+                                    <Form.Label>Region*</Form.Label>
                                     <Form.Select
                                         onChange={onChangeRegion}
                                         onSelect={region}
@@ -543,7 +563,7 @@ export default function RegistrarNewStudent() {
                             /> */}
                                 </Form.Group>
                                 <Form.Group className="mb-3">
-                                    <Form.Label>Province</Form.Label>
+                                    <Form.Label>Province*</Form.Label>
                                     <Form.Select
                                         ref={provinceRef}
                                         onChange={onChangeProvince}
@@ -568,7 +588,7 @@ export default function RegistrarNewStudent() {
                                 </Form.Group>
 
                                 <Form.Group className="mb-3">
-                                    <Form.Label>Municipality</Form.Label>
+                                    <Form.Label>Municipality*</Form.Label>
                                     <Form.Select
                                         ref={municipalityRef}
                                         onChange={onChangeCity}
@@ -589,12 +609,12 @@ export default function RegistrarNewStudent() {
                                     </Form.Select>
                                 </Form.Group>
                                 <Form.Group className="mb-3">
-                                    <Form.Label>barangay</Form.Label>
+                                    <Form.Label>Barangay*</Form.Label>
                                     <Form.Select
                                         ref={barangayRef}
                                         onChange={onChangeBarangay}
                                     >
-                                        <option>Select Barangay</option>
+                                        <option>Select Barangay*</option>
                                         {barangayData &&
                                             barangayData.length > 0 &&
                                             barangayData.map((item) => (
@@ -608,7 +628,7 @@ export default function RegistrarNewStudent() {
                                     </Form.Select>
                                 </Form.Group>
                                 <Form.Group className="mb-3">
-                                    <Form.Label>No./Street</Form.Label>
+                                    <Form.Label>No./Street*</Form.Label>
                                     <Form.Control
                                         type="text"
                                         ref={streetRef}
@@ -619,7 +639,7 @@ export default function RegistrarNewStudent() {
                             <h3 className="mt-4">BIRTH:</h3>
                             <div className="d-flex flex-wrap gap-5 border p-3 border-2 rounded">
                                 <Form.Group className="mb-3">
-                                    <Form.Label>BIRTHDATE</Form.Label>
+                                    <Form.Label>BIRTHDATE*</Form.Label>
                                     <Form.Control
                                         type="date"
                                         placeholder="mm/dd/yyyy"
@@ -627,7 +647,7 @@ export default function RegistrarNewStudent() {
                                     />
                                 </Form.Group>
                                 <Form.Group className="mb-3">
-                                    <Form.Label>Nationality</Form.Label>
+                                    <Form.Label>Nationality*</Form.Label>
                                     <Form.Control
                                         type="text"
                                         placeholder="Ex. Filipino"
@@ -635,7 +655,7 @@ export default function RegistrarNewStudent() {
                                     />
                                 </Form.Group>
                                 <Form.Group className="mb-3">
-                                    <Form.Label>Municipality</Form.Label>
+                                    <Form.Label>Municipality*</Form.Label>
                                     <Form.Control
                                         type="text"
                                         placeholder="Ex. Umingan"
@@ -643,7 +663,7 @@ export default function RegistrarNewStudent() {
                                     />
                                 </Form.Group>
                                 <Form.Group className="mb-3">
-                                    <Form.Label>Province</Form.Label>
+                                    <Form.Label>Province*</Form.Label>
                                     <Form.Control
                                         type="text"
                                         placeholder="Ex. Pangasinan"
@@ -651,7 +671,7 @@ export default function RegistrarNewStudent() {
                                     />
                                 </Form.Group>
                                 <Form.Group className="mb-3">
-                                    <Form.Label>GENDER</Form.Label>
+                                    <Form.Label>GENDER*</Form.Label>
                                     <Form.Select ref={genderRef}>
                                         <option value="">Select Gender</option>
                                         <option value="male">Male</option>
@@ -659,7 +679,7 @@ export default function RegistrarNewStudent() {
                                     </Form.Select>
                                 </Form.Group>
                                 <Form.Group className="mb-3">
-                                    <Form.Label>RELIGION</Form.Label>
+                                    <Form.Label>RELIGION*</Form.Label>
                                     <Form.Control
                                         type="text"
                                         placeholder="Ex. Catholic"
@@ -673,7 +693,7 @@ export default function RegistrarNewStudent() {
                             <div className="d-flex flex-wrap gap-5 border p-3 border-2 rounded">
                                 <Form.Group className="mb-3">
                                     <Form.Label>
-                                        Contact Number of the Student
+                                        Contact Number of the Student*
                                     </Form.Label>
                                     <Form.Control
                                         type="text"
@@ -682,7 +702,7 @@ export default function RegistrarNewStudent() {
                                     />
                                 </Form.Group>
                                 <Form.Group className="mb-3">
-                                    <Form.Label>Email Address</Form.Label>
+                                    <Form.Label>Email Address*</Form.Label>
                                     <Form.Control
                                         type="text"
                                         placeholder="Ex. juandelacruz@gmail.com"
@@ -691,7 +711,7 @@ export default function RegistrarNewStudent() {
                                 </Form.Group>
                                 <Form.Group className="mb-3">
                                     <Form.Label>
-                                        Social Media Account
+                                        Social Media Account*
                                     </Form.Label>
                                     <Form.Control
                                         type="text"
@@ -705,7 +725,7 @@ export default function RegistrarNewStudent() {
                             <h3 className="mt-4">PARENTS FATHER'S NAME:</h3>
                             <div className="d-flex flex-wrap gap-5 border p-3 border-2 rounded">
                                 <Form.Group className="mb-3">
-                                    <Form.Label>FATHER'S NAME</Form.Label>
+                                    <Form.Label>FATHER'S NAME*</Form.Label>
                                     <Form.Control
                                         type="text"
                                         placeholder="Ex. Pedro Dela Cruz"
@@ -713,7 +733,7 @@ export default function RegistrarNewStudent() {
                                     />
                                 </Form.Group>
                                 <Form.Group className="mb-3">
-                                    <Form.Label>OCCUPATION</Form.Label>
+                                    <Form.Label>OCCUPATION*</Form.Label>
                                     <Form.Control
                                         type="text"
                                         placeholder="Ex. Farming"
@@ -721,7 +741,7 @@ export default function RegistrarNewStudent() {
                                     />
                                 </Form.Group>
                                 <Form.Group className="mb-3">
-                                    <Form.Label>Contact Number</Form.Label>
+                                    <Form.Label>Contact Number*</Form.Label>
                                     <Form.Control
                                         type="text"
                                         placeholder="Ex. 09214569876"
@@ -750,7 +770,7 @@ export default function RegistrarNewStudent() {
                             <h3 className="mt-4">PARENTS MOTHER'S NAME:</h3>
                             <div className="d-flex flex-wrap gap-5 border p-3 border-2 rounded">
                                 <Form.Group className="mb-3">
-                                    <Form.Label>MOTHER'S NAME</Form.Label>
+                                    <Form.Label>MOTHER'S NAME*</Form.Label>
                                     <Form.Control
                                         type="text"
                                         placeholder="Ex.  Susan Dela Cruz"
@@ -758,7 +778,7 @@ export default function RegistrarNewStudent() {
                                     />
                                 </Form.Group>
                                 <Form.Group className="mb-3">
-                                    <Form.Label>OCCUPATION</Form.Label>
+                                    <Form.Label>OCCUPATION*</Form.Label>
                                     <Form.Control
                                         type="text"
                                         placeholder="Ex. Housewife"
@@ -766,7 +786,7 @@ export default function RegistrarNewStudent() {
                                     />
                                 </Form.Group>
                                 <Form.Group className="mb-3">
-                                    <Form.Label>Contact Number</Form.Label>
+                                    <Form.Label>Contact Number*</Form.Label>
                                     <Form.Control
                                         type="text"
                                         placeholder="Ex. 09213458765"
@@ -795,7 +815,7 @@ export default function RegistrarNewStudent() {
                             <h3 className="mt-4">GUARDIAN'S NAME:</h3>
                             <div className="d-flex flex-wrap gap-5 border p-3 border-2 rounded">
                                 <Form.Group className="mb-3">
-                                    <Form.Label>GUARDIAN'S NAME</Form.Label>
+                                    <Form.Label>GUARDIAN'S NAME*</Form.Label>
                                     <Form.Control
                                         type="text"
                                         placeholder="Ex.  Susan Dela Cruz"
@@ -803,7 +823,7 @@ export default function RegistrarNewStudent() {
                                     />
                                 </Form.Group>
                                 <Form.Group className="mb-3">
-                                    <Form.Label>OCCUPATION</Form.Label>
+                                    <Form.Label>OCCUPATION*</Form.Label>
                                     <Form.Control
                                         type="text"
                                         placeholder="Ex. Housewife"
@@ -811,7 +831,7 @@ export default function RegistrarNewStudent() {
                                     />
                                 </Form.Group>
                                 <Form.Group className="mb-3">
-                                    <Form.Label>Contact Number</Form.Label>
+                                    <Form.Label>Contact Number*</Form.Label>
                                     <Form.Control
                                         type="text"
                                         placeholder="Ex. 09213458765"
@@ -829,7 +849,7 @@ export default function RegistrarNewStudent() {
                                     />
                                 </Form.Group>
                                 <Form.Group className="mb-3">
-                                    <Form.Label>Email Address</Form.Label>
+                                    <Form.Label>Email Address*</Form.Label>
                                     <Form.Control
                                         type="email"
                                         placeholder="Ex. Pedro Dela Cruz"
@@ -844,7 +864,7 @@ export default function RegistrarNewStudent() {
                             </h3>
                             <div className="d-flex flex-wrap gap-5 border p-3 border-2 rounded">
                                 <Form.Group className="mb-3">
-                                    <Form.Label>School Name</Form.Label>
+                                    <Form.Label>School Name*</Form.Label>
                                     <Form.Control
                                         type="text"
                                         placeholder="Ex. Flores NHS"
@@ -852,7 +872,7 @@ export default function RegistrarNewStudent() {
                                     />
                                 </Form.Group>
                                 <Form.Group className="mb-3">
-                                    <Form.Label>School Address</Form.Label>
+                                    <Form.Label>School Address*</Form.Label>
                                     <Form.Control
                                         type="text"
                                         placeholder="Ex. Flores, Umingan, Pang."
@@ -898,6 +918,16 @@ export default function RegistrarNewStudent() {
                 </Form>
             </div>
             <ToastContainer limit={1} />
+
+            <ConfirmationLoad
+                show={handleShow}
+                onHide={hanldeClose}
+                confirm={onSubmit}
+                title={
+                    "Please review all the entered details carefully before submitting. You can still make changes if needed, but ensuring accuracy now will help avoid any delays or issues with the student's enrollment and access to program resources."
+                }
+                loading={_loading}
+            />
         </>
     );
 }

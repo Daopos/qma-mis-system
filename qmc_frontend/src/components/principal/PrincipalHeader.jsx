@@ -92,7 +92,7 @@ export default function PrincipalHeader() {
 
                 <Link
                     className="sidebar-item d-flex align-items-center gap-2"
-                    to="/principal/subjects/teacher-list"
+                    to="/principal/teacher-list"
                     onClick={handleCloseNav}
                 >
                     <PeopleIcon style={{ fontSize: 25 }} />

@@ -128,13 +128,15 @@ export default function RegistrarOldStudent() {
                     </thead>
                     <tbody>
                         {studentsToRender.map((data, index) => {
-                            const studentName = `${data.student.surname}${
-                                data.student.extension_name
-                                    ? ` ${data.student.extension_name}`
-                                    : ""
-                            }, ${data.student.firstname}${
+                            const studentName = `${data.student.surname}, ${
+                                data.student.firstname
+                            }${
                                 data.student.middlename
                                     ? `, ${data.student.middlename.charAt(0)}.`
+                                    : ""
+                            }${
+                                data.student.extension_name
+                                    ? ` ${data.student.extension_name}`
                                     : ""
                             }`;
 
@@ -149,7 +151,7 @@ export default function RegistrarOldStudent() {
                                         >
                                             <img
                                                 src={
-                                                    data?.image ||
+                                                    data?.student.image_url ||
                                                     "/img/profile.png"
                                                 }
                                                 alt="Profile"
@@ -435,11 +437,11 @@ export default function RegistrarOldStudent() {
                                     getPaginatedData(studentsByGrade.grade11)
                                 )}
                             </Tab>
-                            <Tab eventKey="grade12" title="Grade 12">
+                            {/* <Tab eventKey="grade12" title="Grade 12">
                                 {renderTable(
                                     getPaginatedData(studentsByGrade.grade12)
                                 )}
-                            </Tab>
+                            </Tab> */}
                         </Tabs>
                     </div>
                 </div>

@@ -22,7 +22,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { toast, ToastContainer } from "react-toastify";
 import "./PrincipalCss.css";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
-import ConfirmationLoad from "../components/Confirmationload";
+import ConfirmationLoad from "../components/ConfirmationLoad";
 
 export default function PrinciaplClassroomList() {
     const [showNewClass, setNewClass] = useState(false);
@@ -49,6 +49,8 @@ export default function PrinciaplClassroomList() {
     const [countStudents, setCountStudents] = useState("");
 
     const [formLoading, setFormLoading] = useState(false);
+
+    const [selectedClassroom, setSelectedClassroom] = useState("");
 
     const handleCloseConfirm = () => {
         setConfirm(false);
@@ -130,15 +132,18 @@ export default function PrinciaplClassroomList() {
 
         axiosClientPrincipal
             .post("/classrooms", payload)
-            .then(() => {
+            .then((response) => {
                 handleCloseNewClass();
                 toast.success("Classroom added successfully!"); // Success notification
                 getClassrooms();
             })
-            .catch((err) => {
-                toast.error(
-                    "Please complete the title and grade level fields."
-                ); // Error notification
+            .catch((error) => {
+                // Check for backend validation errors or other responses
+                if (error.response && error.response.data.message) {
+                    toast.error(error.response.data.message); // Show backend error message from toast
+                } else {
+                    toast.error("Please complete the required fields."); // Fallback error message
+                }
             })
             .finally(() => setFormLoading(false));
     };
@@ -170,11 +175,14 @@ export default function PrinciaplClassroomList() {
             formData.append("title", titleRef.current.value);
         }
         // if (gradeRef.current.value) {
-        //     formData.append("grade_level", gradeRef.current.value);
+        //     formData.append("grade_level", gradeRef.current.value);  // Ensure this is included if you want to update grade level
         // }
         if (adviserRef.current.value) {
             formData.append("adviser_id", adviserRef.current.value);
+        } else {
+            formData.append("adviser_id", ""); // Ensures no adviser is set if the field is empty
         }
+
         setFormLoading(true);
 
         axiosClientPrincipal
@@ -185,8 +193,18 @@ export default function PrinciaplClassroomList() {
                 toast.success("Classroom updated successfully!"); // Success notification
             })
             .catch((err) => {
-                toast.success("Error"); // Success notification
-                console.log("fail");
+                // Log the error to inspect its structure
+
+                // Check if the response contains a message
+                if (
+                    err.response &&
+                    err.response.data &&
+                    err.response.data.message
+                ) {
+                    toast.error(err.response.data.message); // Error message from backend
+                } else {
+                    toast.error("Error updating classroom!"); // Default error message
+                }
             })
             .finally(() => setFormLoading(false));
     };
@@ -248,6 +266,7 @@ export default function PrinciaplClassroomList() {
                                     className="button-list button-orange"
                                     onClick={() => {
                                         setEditId(data.id);
+                                        setSelectedClassroom(data);
                                         setEditClass(true);
                                     }}
                                 >
@@ -515,7 +534,7 @@ export default function PrinciaplClassroomList() {
                         >
                             <Form.Label>Adviser</Form.Label>
                             <Form.Select ref={adviserRef}>
-                                <option value="">Select Adviser</option>
+                                <option value="">None</option>
                                 {teachers.map((data, index) => {
                                     return (
                                         <option key={index} value={data.id}>
@@ -563,34 +582,42 @@ export default function PrinciaplClassroomList() {
                                 autoFocus
                                 ref={titleRef}
                                 placeholder="Ex. Falcon"
+                                value={
+                                    selectedClassroom
+                                        ? selectedClassroom.title
+                                        : ""
+                                } // Set value from selected classroom
+                                onChange={(e) =>
+                                    setSelectedClassroom({
+                                        ...selectedClassroom,
+                                        title: e.target.value,
+                                    })
+                                } // Update state on change
                             />
                         </Form.Group>
-                        {/* <Form.Group className="mb-3">
-                            <Form.Label>Grade Level</Form.Label>
-                            <Form.Select ref={gradeRef}>
-                                <option value="">Grade Level</option>
-                                <option value="7">Grade 7</option>
-                                <option value="8">Grade 8</option>
-                                <option value="9">Grade 9</option>
-                                <option value="10">Grade 10</option>
-                                <option value="11">Grade 11</option>
-                                <option value="12">Grade 12</option>
-                            </Form.Select>
-                        </Form.Group> */}
-                        <Form.Group
-                            className="mb-3"
-                            controlId="exampleForm.ControlInput1"
-                        >
+
+                        <Form.Group className="mb-3">
                             <Form.Label>Adviser</Form.Label>
-                            <Form.Select ref={adviserRef}>
+                            <Form.Select
+                                ref={adviserRef}
+                                value={
+                                    selectedClassroom
+                                        ? selectedClassroom.adviser_id
+                                        : ""
+                                } // Set value from selected classroom
+                                onChange={(e) =>
+                                    setSelectedClassroom({
+                                        ...selectedClassroom,
+                                        adviser_id: e.target.value,
+                                    })
+                                } // Update state on change
+                            >
                                 <option value="">Select Adviser</option>
-                                {teachers.map((data, index) => {
-                                    return (
-                                        <option key={index} value={data.id}>
-                                            {data.fname} {data.lname}
-                                        </option>
-                                    );
-                                })}
+                                {teachers.map((data, index) => (
+                                    <option key={index} value={data.id}>
+                                        {data.fname} {data.lname}
+                                    </option>
+                                ))}
                             </Form.Select>
                         </Form.Group>
                     </Form>

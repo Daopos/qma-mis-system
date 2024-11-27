@@ -8,6 +8,7 @@ use App\Models\Employee;
 use App\Models\Guardian;
 use App\Models\Registrar;
 use App\Models\Student;
+use App\Notifications\AdminLoginNotification;
 use App\Notifications\EmployeePasswordNotification;
 use App\Notifications\LoginSuccessful;
 use Illuminate\Http\Request;
@@ -48,6 +49,12 @@ class AuthController extends Controller
             ], 401); // Return 401 Unauthorized status code
         }
         $token = $admin->createToken($admin->username, ['role:admin']);
+
+        $loginDate = now()->format('F j, l g:i A');
+        $device = $request->header('User-Agent');
+
+        $notification = new AdminLoginNotification($admin, $loginDate, $device);
+        $notification->sendLoginNotification();
 
         return [
             'user' => $admin,

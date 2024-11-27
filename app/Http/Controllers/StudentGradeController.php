@@ -59,10 +59,10 @@ class StudentGradeController extends Controller
     $fields = $request->validate([
         'student_id' => 'required',
         'subject_id' => 'nullable',
-        'first_quarter' => 'nullable',
-        'second_quarter' => 'nullable',
-        'third_quarter' => 'nullable',
-        'fourth_quarter' => 'nullable',
+        'first_quarter' => 'nullable|numeric|min:0|max:100', // No negative numbers
+        'second_quarter' => 'nullable|numeric|min:0|max:100', // No negative numbers
+        'third_quarter' => 'nullable|numeric|min:0|max:100', // No negative numbers
+        'fourth_quarter' => 'nullable|numeric|min:0|max:100', // No negative numbers
     ]);
 
     // Get the active academic year
@@ -127,10 +127,10 @@ public function updateStudentGrade(Request $request)
     $fields = $request->validate([
         'student_id' => 'required',
         'subject_id' => 'required',
-        'first_quarter' => 'nullable',
-        'second_quarter' => 'nullable',
-        'third_quarter' => 'nullable',
-        'fourth_quarter' => 'nullable',
+        'first_quarter' => 'nullable|numeric|min:0|max:100', // No negative numbers
+        'second_quarter' => 'nullable|numeric|min:0|max:100', // No negative numbers
+        'third_quarter' => 'nullable|numeric|min:0|max:100', // No negative numbers
+        'fourth_quarter' => 'nullable|numeric|min:0|max:100', // No negative numbers
     ]);
 
     // Get the active academic year

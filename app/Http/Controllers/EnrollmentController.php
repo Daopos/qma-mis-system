@@ -6,6 +6,7 @@ use App\Models\Enrollment;
 use App\Http\Requests\StoreEnrollmentRequest;
 use App\Http\Requests\UpdateEnrollmentRequest;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class EnrollmentController extends Controller
 {
@@ -48,13 +49,23 @@ class EnrollmentController extends Controller
     {
         //
     }
-
     public function getUnenrolledStudents()
     {
         // Query to get students where enrollment_status is not 'enrolled'
         $unenrolledStudents = Enrollment::where('enrollment_status', '=', 'unenrolled')
                                          ->with('student') // Optional: Load the student relationship
-                                         ->get();
+                                         ->get()
+                                         ->map(function ($enrollment) {
+                                             // Get the student and add the full image URL to the student data
+                                             $student = $enrollment->student;
+                                             // Check if image exists and generate full URL
+                                             if ($student->image) {
+                                                $student->image_url = $student->image ? url(Storage::url($student->image)) : null;
+                                             } else {
+                                                 $student->image_url = null; // Handle case where no image exists
+                                             }
+                                             return $enrollment;
+                                         });
 
         return response()->json($unenrolledStudents);
     }

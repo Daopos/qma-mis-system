@@ -66,6 +66,13 @@ export default function PrintWithBalance() {
     return (
         <div>
             <div ref={pdfRef} className="pdf-container">
+                <div className="d-flex justify-content-center gap-2 pb-4">
+                    <img src="/img/logo.png" alt="" width={100} />
+                    <div className="d-flex flex-column justify-content-center align-items-center">
+                        <h3>QUEZON MEMORIAL ACADEMY</h3>
+                        <h6>Umingan, Pangasinan</h6>
+                    </div>
+                </div>
                 <h1 className="report-title">
                     Student Report: Student With Balance
                 </h1>
@@ -84,13 +91,13 @@ export default function PrintWithBalance() {
                             <tr key={index}>
                                 <td>{index + 1}</td>
                                 <td>{data.lrn}</td>
-                                <td>{`${data.surname}${
-                                    data.extension_name
-                                        ? ` ${data.extension_name}`
-                                        : ""
-                                }, ${data.firstname}${
+                                <td>{`${data.surname}, ${data.firstname}${
                                     data.middlename
                                         ? `, ${data.middlename.charAt(0)}.`
+                                        : ""
+                                }${
+                                    data.extension_name
+                                        ? ` ${data.extension_name}`
                                         : ""
                                 }`}</td>
                                 <td>{data.grade_level}</td>

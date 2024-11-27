@@ -131,17 +131,26 @@ export default function PrincipalClassView({
                             <tr key={index}>
                                 <td>{index + 1}</td>
                                 <td>{data.student.lrn}</td>
-                                <td>{`${data.student.surname}${
-                                    data.student.extension_name
-                                        ? ` ${data.student.extension_name}`
-                                        : ""
-                                }, ${data.student.firstname}${
-                                    data.student.middlename
-                                        ? `, ${data.student.middlename.charAt(
-                                              0
-                                          )}.`
-                                        : ""
-                                }`}</td>
+                                <td>
+                                    {`${data.student.surname}, ${
+                                        data.student.firstname
+                                    }${
+                                        data.student.middlename
+                                            ? `, ${data.student.middlename.charAt(
+                                                  0
+                                              )}.`
+                                            : ""
+                                    }${
+                                        data.student.extension_name
+                                            ? ` ${data.student.extension_name}`
+                                            : ""
+                                    }${
+                                        data.student.strand &&
+                                        data.student.strand !== "null"
+                                            ? ` (${data.student.strand})`
+                                            : ""
+                                    }`}
+                                </td>
                                 <td>{data.student.grade_level}</td>
                                 <td>
                                     <Form.Check
@@ -194,17 +203,27 @@ export default function PrincipalClassView({
                                         <tr key={index}>
                                             <td>{index + 1}</td>
                                             <td>{data.lrn}</td>
-                                            <td>{`${data.surname}, ${
-                                                data.firstname
-                                            }, ${
-                                                data.middlename
-                                                    ? data.middlename.charAt(0)
-                                                    : ""
-                                            }${
-                                                data.extension_name
-                                                    ? ", " + data.extension_name
-                                                    : ""
-                                            }`}</td>
+                                            <td>
+                                                {`${data.surname}, ${
+                                                    data.firstname
+                                                }, ${
+                                                    data.middlename
+                                                        ? data.middlename.charAt(
+                                                              0
+                                                          )
+                                                        : ""
+                                                }${
+                                                    data.extension_name
+                                                        ? ", " +
+                                                          data.extension_name
+                                                        : ""
+                                                }${
+                                                    data.strand &&
+                                                    data.strand !== "null"
+                                                        ? ` (${data.strand})`
+                                                        : ""
+                                                }`}
+                                            </td>
                                             <td>{data.grade_level}</td>
                                             <td>
                                                 <Form.Check

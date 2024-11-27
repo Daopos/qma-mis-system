@@ -90,7 +90,7 @@ export default function ParentSoa() {
                             fontWeight: "bold",
                         }}
                     >
-                        ₱{balance.toLocaleString()}
+                        ₱{balance?.toLocaleString() || "0"}
                     </h3>
                 </div>
                 <table className={parentGradeCSS.parentTable}>

@@ -216,13 +216,15 @@ export default function RegistrarEnrolled() {
                                     {startIndex + index + 1}
                                 </td>
                                 <td data-label="LRN">{data.lrn}</td>
-                                <td data-label="Name">{`${data.surname}${
-                                    data.extension_name
-                                        ? ` ${data.extension_name}`
-                                        : ""
-                                }, ${data.firstname}${
+                                <td data-label="Name">{`${data.surname}, ${
+                                    data.firstname
+                                }${
                                     data.middlename
                                         ? `, ${data.middlename.charAt(0)}.`
+                                        : ""
+                                }${
+                                    data.extension_name
+                                        ? ` ${data.extension_name}`
                                         : ""
                                 }`}</td>
                                 <td data-label="Grade Level">
@@ -838,8 +840,11 @@ export default function RegistrarEnrolled() {
                                                 <h6>Social Media</h6>
                                                 <h5>
                                                     <u>
-                                                        {profile.father_social ||
-                                                            "N/A"}
+                                                        {profile.father_social &&
+                                                        profile.father_social !==
+                                                            "null"
+                                                            ? profile.father_social
+                                                            : "N/A"}
                                                     </u>
                                                 </h5>
                                             </div>
@@ -847,8 +852,11 @@ export default function RegistrarEnrolled() {
                                                 <h6>Email Address</h6>
                                                 <h5>
                                                     <u>
-                                                        {profile.father_email ||
-                                                            "N/A"}
+                                                        {profile.father_email &&
+                                                        profile.father_email !==
+                                                            "null"
+                                                            ? profile.father_email
+                                                            : "N/A"}
                                                     </u>
                                                 </h5>
                                             </div>
@@ -885,8 +893,11 @@ export default function RegistrarEnrolled() {
                                                 <h6>Social Media</h6>
                                                 <h5>
                                                     <u>
-                                                        {profile.mother_social ||
-                                                            "N/A"}
+                                                        {profile.mother_social &&
+                                                        profile.mother_email !==
+                                                            "null"
+                                                            ? profile.mother_email
+                                                            : "N/A"}
                                                     </u>
                                                 </h5>
                                             </div>
@@ -894,8 +905,11 @@ export default function RegistrarEnrolled() {
                                                 <h6>Email Address</h6>
                                                 <h5>
                                                     <u>
-                                                        {profile.mother_email ||
-                                                            "N/A"}
+                                                        {profile.mother_email &&
+                                                        profile.mother_email !==
+                                                            "null"
+                                                            ? profile.mother_email
+                                                            : "N/A"}
                                                     </u>
                                                 </h5>
                                             </div>
@@ -932,8 +946,11 @@ export default function RegistrarEnrolled() {
                                                 <h6>Social Media</h6>
                                                 <h5>
                                                     <u>
-                                                        {profile.guardian_social ||
-                                                            "N/A"}
+                                                        {profile.guardian_social &&
+                                                        profile.guardian_social !==
+                                                            "null"
+                                                            ? profile.guardian_social
+                                                            : "N/A"}
                                                     </u>
                                                 </h5>
                                             </div>

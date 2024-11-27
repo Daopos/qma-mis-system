@@ -44,8 +44,8 @@ export default function OldStudentForm({
 
         // Manually append each form value to FormData
         formData.append("lrn", formValues.lrn);
-        formData.append("track", formValues.track);
-        formData.append("strand", formValues.strand);
+        formData.append("track", formValues.track || "");
+        formData.append("strand", formValues.strand || "");
         formData.append("surname", formValues.surname);
         formData.append("firstname", formValues.firstname);
         formData.append("middlename", formValues.middlename || "");

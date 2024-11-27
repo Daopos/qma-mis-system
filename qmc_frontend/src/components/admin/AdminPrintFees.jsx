@@ -10,10 +10,17 @@ const AdminPrintFees = React.forwardRef(({ fees, gradeType }, ref) => {
             ref={ref}
             style={{ padding: "30px", fontFamily: "Arial, sans-serif" }}
         >
-            <h2 style={{ textAlign: "center" }}>
+            <div className="d-flex justify-content-center gap-2">
+                <img src="/img/logo.png" alt="" width={100} />
+                <div className="d-flex flex-column justify-content-center align-items-center">
+                    <h3>QUEZON MEMORIAL ACADEMY</h3>
+                    <h6>Umingan, Pangasinan</h6>
+                </div>
+            </div>
+            <h2 style={{ textAlign: "center", marginTop: 20 }}>
                 Fee Breakdown for Grade {gradeType}
             </h2>
-            <Table striped bordered hover style={{ marginTop: "20px" }}>
+            <Table bordered style={{ marginTop: "20px" }}>
                 <thead>
                     <tr>
                         <th>Title</th>

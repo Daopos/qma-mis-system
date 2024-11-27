@@ -82,6 +82,14 @@ export default function AdminLogin() {
                     <h2>Admin</h2>
                 </div>
                 <div>
+                    <img
+                        src="/img/logo.png"
+                        alt=""
+                        width={100}
+                        className="mob-logo"
+                    />
+                    <h2 className="mob-h">Admin </h2>
+                    <div className="mob-line"></div>
                     <form onSubmit={onSubmit}>
                         <h1>Log in</h1>
                         <div>

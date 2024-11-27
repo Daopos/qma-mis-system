@@ -253,6 +253,11 @@ export default function FinanceProfile() {
                 {renderField("fname", "First Name", profile?.fname)}
                 {renderField("mname", "Middle Name", profile?.mname)}
                 {renderField("lname", "Last Name", profile?.lname)}
+                {renderField(
+                    "extension_name",
+                    "Extension Name",
+                    profile?.extension_name
+                )}
                 {renderField("address", "Address", profile?.address)}
                 {/* Reset Password Button */}
                 <div className="mt-4">

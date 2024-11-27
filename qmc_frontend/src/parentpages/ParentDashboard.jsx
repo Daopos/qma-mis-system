@@ -106,7 +106,7 @@ export default function ParentDashboard() {
                 <DashboardBox
                     BoxColor="#1C77"
                     title="Balance"
-                    count={balance.toLocaleString()}
+                    count={balance?.toLocaleString() || "0"}
                 />
                 <DashboardBox
                     BoxColor="#9E4784"

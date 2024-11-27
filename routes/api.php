@@ -45,6 +45,10 @@ use App\Models\TestSubmission;
 Route::get('/enrollment-form', [EnrollmetFormController::class, 'showOrCreate'])->middleware('auth:sanctum');
 Route::post('/enrollment-form', [EnrollmetFormController::class, 'update'])->middleware('auth:sanctum');
 
+
+Route::put('/admin/reset', [AdminController::class, 'updateProfile'])->middleware('auth:sanctum');
+
+
 Route::apiResource('employees', EmployeeController::class);
 Route::apiResource('admins', AdminController::class)->middleware('auth:sanctum');
 Route::apiResource('gradefees', GradeFeeController::class)->middleware('auth:sanctum');
