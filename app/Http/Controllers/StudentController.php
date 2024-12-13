@@ -1041,26 +1041,44 @@ public function getConfirmedCount() {
 
 
 public function getStudentsWithoutBirthCertificate()
-    {
-        $students = Student::where('birth_certificate', false)->get();
-        return response()->json($students);
-    }
+{
+    // Use whereHas to filter based on the enrollment status
+    $students = Student::where('birth_certificate', false)
+        ->whereHas('enrollments', function ($query) {
+            $query->where('enrollment_status', 'enrolled');
+        })
+        ->get();
+
+    return response()->json($students);
+}
 
     public function getStudentsWithoutReportCard()
     {
-        $students = Student::where('birth_certificate', false)->get();
+        $students = Student::where('birth_certificate', false)->whereHas('enrollments', function ($query) {
+            $query->where('enrollment_status', 'enrolled');
+        })
+        ->get();
+
         return response()->json($students);
     }
 
     public function getStudentsWithoutTranscriptRecord()
     {
-        $students = Student::where('transcript_record', false)->get();
+        $students = Student::where('transcript_record', false)->whereHas('enrollments', function ($query) {
+            $query->where('enrollment_status', 'enrolled');
+        })
+        ->get();
+
         return response()->json($students);
     }
 
     public function getStudentsWithoutGoodMoral()
     {
-        $students = Student::where('good_moral', false)->get();
+        $students = Student::where('good_moral', false) ->whereHas('enrollments', function ($query) {
+            $query->where('enrollment_status', 'enrolled');
+        })
+        ->get();
+
         return response()->json($students);
     }
 
@@ -1109,5 +1127,27 @@ return response()->json($result); // Example output: ['grade_7' => 2, 'grade_9' 
     public function getStudentWithInfo() {
 
     }
+
+    public function updateStudentTransfer($id)
+    {
+        // Find the student by ID
+        $student = Student::find($id);
+
+        if ($student) {
+            // Update the 'other' field to 'transferred'
+            $student->other = 'transferred';
+
+            // Save the changes
+            $student->save();
+
+            // Return success response
+            return response()->json('Success');
+        } else {
+            // Return error if student not found
+            return response()->json('Student not found', 404);
+        }
+    }
+
+
 
 }

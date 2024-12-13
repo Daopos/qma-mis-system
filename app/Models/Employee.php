@@ -65,4 +65,9 @@ class Employee extends Model
     {
         return $this->hasMany(Subject::class, 'teacher_id');
     }
+
+    public function serviceRecords()
+{
+    return $this->hasMany(EmployeeServiceRecords::class);
+}
 }

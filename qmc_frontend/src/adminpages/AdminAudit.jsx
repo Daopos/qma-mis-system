@@ -13,6 +13,7 @@ export default function AdminAudit() {
     const [selectedLevel, setSelectedLevel] = useState("");
     const [dateFrom, setDateFrom] = useState("");
     const [dateTo, setDateTo] = useState("");
+    const [searchUser, setSearchUser] = useState(""); // State for search input
     const [currentPage, setCurrentPage] = useState(1); // State for current page
     const itemsPerPage = 10; // Set how many items you want per page
 
@@ -46,7 +47,12 @@ export default function AdminAudit() {
         setCurrentPage(1); // Reset to first page on date change
     };
 
-    // Filter data based on the selected user level and date range
+    const handleSearchChange = (event) => {
+        setSearchUser(event.target.value);
+        setCurrentPage(1); // Reset to first page on search change
+    };
+
+    // Filter data based on the selected user level, date range, and search input
     const filteredData =
         data?.filter((audit) => {
             const auditDate = new Date(audit.created_at);
@@ -58,8 +64,11 @@ export default function AdminAudit() {
             const isInDateRange =
                 (!fromDate || auditDate >= fromDate) &&
                 (!toDate || auditDate <= toDate);
+            const matchesSearch =
+                !searchUser ||
+                audit.user.toLowerCase().includes(searchUser.toLowerCase());
 
-            return isInUserLevel && isInDateRange;
+            return isInUserLevel && isInDateRange && matchesSearch;
         }) || []; // Default to an empty array if data is undefined
 
     // Pagination logic
@@ -134,6 +143,22 @@ export default function AdminAudit() {
                     />
                 </div>
             </div>
+            <div className="col-3">
+                <div>
+                    <label htmlFor="search-user" className="form-label">
+                        Search User:
+                    </label>
+                    <input
+                        type="text"
+                        id="search-user"
+                        className="form-control"
+                        value={searchUser}
+                        onChange={handleSearchChange}
+                        placeholder="Search by User"
+                    />
+                </div>
+            </div>
+
             <div className="list-container">
                 <div className="d-flex justify-content-between list-title-container">
                     <h2>Audit Trail</h2>

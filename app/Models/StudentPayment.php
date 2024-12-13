@@ -15,6 +15,8 @@ class StudentPayment extends Model
         'payment',
         'desc',
         'encoder',
-        'academic_year'
+        'academic_year',
+        'transaction_number'
+
     ];
 }

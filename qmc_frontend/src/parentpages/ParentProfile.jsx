@@ -220,10 +220,10 @@ export default function ParentProfile() {
                     <div className="mt-4">
                         {!showPasswordReset && (
                             <Button
-                                variant="danger"
+                                variant="warning"
                                 onClick={() => setShowPasswordReset(true)}
                             >
-                                Reset Password
+                                Change Password
                             </Button>
                         )}
                         {renderPasswordReset()}

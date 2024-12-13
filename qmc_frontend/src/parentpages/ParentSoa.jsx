@@ -90,7 +90,11 @@ export default function ParentSoa() {
                             fontWeight: "bold",
                         }}
                     >
-                        ₱{balance?.toLocaleString() || "0"}
+                        ₱
+                        {parseFloat(balance).toLocaleString(undefined, {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2,
+                        }) || "0"}
                     </h3>
                 </div>
                 <table className={parentGradeCSS.parentTable}>
@@ -100,6 +104,7 @@ export default function ParentSoa() {
                             <th>Description</th>
                             <th>Amount</th>
                             <th>Encoder</th>
+                            <th>Tr. No.</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -139,10 +144,18 @@ export default function ParentSoa() {
                                                 {payment.desc}
                                             </td>
                                             <td data-label="Amount">
-                                                {payment.amount}
+                                                {parseFloat(
+                                                    payment.amount
+                                                ).toLocaleString(undefined, {
+                                                    minimumFractionDigits: 2,
+                                                    maximumFractionDigits: 2,
+                                                })}
                                             </td>
                                             <td data-label="Encoder">
                                                 {payment.encoder}
+                                            </td>
+                                            <td data-label="Tr. No.">
+                                                {payment.transaction_number}
                                             </td>
                                         </tr>
                                     )

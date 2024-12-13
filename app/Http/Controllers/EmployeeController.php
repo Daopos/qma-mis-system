@@ -6,7 +6,9 @@ use App\Models\Employee;
 use App\Http\Requests\StoreEmployeeRequest;
 use App\Http\Requests\UpdateEmployeeRequest;
 use App\Models\Audit;
+use App\Models\EmployeeServiceRecords;
 use App\Notifications\EmployeeResetPasswordNotification;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -19,17 +21,27 @@ class EmployeeController extends Controller
      */
     public function index()
     {
-        $employees = Employee::orderBy('created_at', 'desc')->get()->map(function ($employee) {
-            if ($employee->image) {
-                $employee->image_url = asset('storage/' . $employee->image);
-            } else {
-                $employee->image_url = null;
-            }
-            return $employee;
-        });
+        // Fetch employees and their related service records
+        $employees = Employee::with('serviceRecords') // Eager load service records
+            ->orderBy('created_at', 'desc')
+            ->get()
+            ->map(function ($employee) {
+                // Add the image URL if available
+                if ($employee->image) {
+                    $employee->image_url = asset('storage/' . $employee->image);
+                } else {
+                    $employee->image_url = null;
+                }
+
+                // Add service records if available
+                $employee->service_records = $employee->serviceRecords; // Add service records to employee
+
+                return $employee;
+            });
 
         return ['employees' => $employees];
     }
+
 
     /**
      * Store a newly created resource in storage.
@@ -155,7 +167,7 @@ class EmployeeController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
         // Find the employee, including soft deleted ones
         $employee = Employee::withTrashed()->find($id);
@@ -173,24 +185,30 @@ class EmployeeController extends Controller
 
             // Permanently delete the employee
             $employee->forceDelete();
+
+            Audit::create([
+                'user' => 'Admin',
+                'action' => 'Admin permanently deleted employee: ' . $employee->fname . ' ' . $employee->lname,
+                'user_level' => 'Admin',
+            ]);
+
             return response()->json(['message' => 'Employee permanently deleted']);
         }
 
-        Audit::create([
-            'user' => 'Admin',
-            'action' => 'Admin permanently deleted employee: ' . $employee->fname . ' ' . $employee->lname,
-            'user_level' => 'Admin',
-        ]);
+        // Handle remarks and date
+$remark = $request->input('remarks', 'resigned');
+$remarkDate = $request->input('remark_date', now()->toDateString()); // Default to current date if not provided
 
+// Create the service record with the remark
+EmployeeServiceRecords::create([
+    'employee_id' => $employee->id,
+    'remarks' => 'Employee ' . $remark
+]);
 
-        Audit::create([
-            'user' => 'Admin',
-            'action' => 'Admin archived employee: ' . $employee->fname . ' ' . $employee->lname,
-            'user_level' => 'Admin',
-        ]);
-        // Soft delete the employee
+        // Archive the employee (soft delete)
         $employee->delete();
-        return response()->json(['message' => 'Employee soft deleted']);
+
+        return response()->json(['message' => 'Employee archived']);
     }
 
 
@@ -216,23 +234,47 @@ class EmployeeController extends Controller
 
 
     public function archive() {
-        $employees = Employee::onlyTrashed('year', 'desc')->get();
+        $employees = Employee::with('serviceRecords')->onlyTrashed('year', 'desc')->get();
         return ['employees' => $employees];
     }
 
 
-    public function recover($id) {
+
+    public function recover($id)
+    {
+        // Find the employee, including soft-deleted ones
         $employee = Employee::withTrashed()->find($id);
+
+        if (!$employee) {
+            return response()->json(['message' => 'Employee not found'], 404);
+        }
+
+        // Restore the employee
         $employee->restore();
 
+        // Optionally update activation status or other fields
+        $employee->activation = true; // Set the employee to active
+        $employee->save();
+
+        // Get the current date
+        $currentDate = Carbon::now()->toDateString(); // Format: YYYY-MM-DD
+
+        // Log the recovery in the service record
+        EmployeeServiceRecords::create([
+            'employee_id' => $employee->id,
+            'remarks' => "Employee recovered (reinstated) on {$currentDate}",
+        ]);
+
+        // Audit log for recovery
         Audit::create([
             'user' => 'Admin',
             'action' => 'Admin recovered (unarchived) employee: ' . $employee->fname . ' ' . $employee->lname,
             'user_level' => 'Admin',
         ]);
 
-        return ['message' => 'recovered'];
+        return response()->json(['message' => 'Employee recovered successfully']);
     }
+
 
     public function count() {
         $count = Employee::count();

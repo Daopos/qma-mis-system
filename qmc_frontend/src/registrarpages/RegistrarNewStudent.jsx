@@ -458,7 +458,8 @@ export default function RegistrarNewStudent() {
                 </div>
                 <div className="alert alert-warning" role="alert">
                     <small>
-                        Fields marked with an asterisk (*) are required.
+                        Fields marked with an asterisk (
+                        <span style={{ color: "red" }}>*</span>) are required.
                     </small>
                 </div>
                 <Form>
@@ -473,7 +474,8 @@ export default function RegistrarNewStudent() {
                             <div className="d-flex flex-wrap gap-5 border p-3 border-2  rounded">
                                 <Form.Group className="mb-0">
                                     <Form.Label>
-                                        LRN*
+                                        LRN
+                                        <span style={{ color: "red" }}>*</span>
                                         {/* <ErrorIcon color="red" /> */}
                                     </Form.Label>
                                     <Form.Control
@@ -504,7 +506,10 @@ export default function RegistrarNewStudent() {
                             <h3 className="mt-4">NAME OF STUDENT:</h3>
                             <div className="d-flex flex-wrap gap-5 border p-3 border-2 rounded">
                                 <Form.Group className="mb-3">
-                                    <Form.Label>SURNAME*</Form.Label>
+                                    <Form.Label>
+                                        SURNAME
+                                        <span style={{ color: "red" }}>*</span>
+                                    </Form.Label>
                                     <Form.Control
                                         type="text"
                                         placeholder="Ex. Dela Cruz"
@@ -512,7 +517,10 @@ export default function RegistrarNewStudent() {
                                     />
                                 </Form.Group>
                                 <Form.Group className="mb-3">
-                                    <Form.Label>First Name*</Form.Label>
+                                    <Form.Label>
+                                        First Name
+                                        <span style={{ color: "red" }}>*</span>
+                                    </Form.Label>
                                     <Form.Control
                                         type="text"
                                         placeholder="Ex. Juan"
@@ -539,7 +547,10 @@ export default function RegistrarNewStudent() {
                             <h3 className="mt-4">HOME ADDRESS:</h3>
                             <div className="d-flex flex-wrap gap-5 border p-3 border-2 rounded">
                                 <Form.Group className="mb-3">
-                                    <Form.Label>Region*</Form.Label>
+                                    <Form.Label>
+                                        Region
+                                        <span style={{ color: "red" }}>*</span>
+                                    </Form.Label>
                                     <Form.Select
                                         onChange={onChangeRegion}
                                         onSelect={region}
@@ -563,7 +574,10 @@ export default function RegistrarNewStudent() {
                             /> */}
                                 </Form.Group>
                                 <Form.Group className="mb-3">
-                                    <Form.Label>Province*</Form.Label>
+                                    <Form.Label>
+                                        Province
+                                        <span style={{ color: "red" }}>*</span>
+                                    </Form.Label>
                                     <Form.Select
                                         ref={provinceRef}
                                         onChange={onChangeProvince}
@@ -588,7 +602,10 @@ export default function RegistrarNewStudent() {
                                 </Form.Group>
 
                                 <Form.Group className="mb-3">
-                                    <Form.Label>Municipality*</Form.Label>
+                                    <Form.Label>
+                                        Municipality
+                                        <span style={{ color: "red" }}>*</span>
+                                    </Form.Label>
                                     <Form.Select
                                         ref={municipalityRef}
                                         onChange={onChangeCity}
@@ -609,7 +626,10 @@ export default function RegistrarNewStudent() {
                                     </Form.Select>
                                 </Form.Group>
                                 <Form.Group className="mb-3">
-                                    <Form.Label>Barangay*</Form.Label>
+                                    <Form.Label>
+                                        Barangay
+                                        <span style={{ color: "red" }}>*</span>
+                                    </Form.Label>
                                     <Form.Select
                                         ref={barangayRef}
                                         onChange={onChangeBarangay}
@@ -628,7 +648,10 @@ export default function RegistrarNewStudent() {
                                     </Form.Select>
                                 </Form.Group>
                                 <Form.Group className="mb-3">
-                                    <Form.Label>No./Street*</Form.Label>
+                                    <Form.Label>
+                                        No./Street
+                                        <span style={{ color: "red" }}>*</span>
+                                    </Form.Label>
                                     <Form.Control
                                         type="text"
                                         ref={streetRef}
@@ -639,7 +662,10 @@ export default function RegistrarNewStudent() {
                             <h3 className="mt-4">BIRTH:</h3>
                             <div className="d-flex flex-wrap gap-5 border p-3 border-2 rounded">
                                 <Form.Group className="mb-3">
-                                    <Form.Label>BIRTHDATE*</Form.Label>
+                                    <Form.Label>
+                                        BIRTHDATE
+                                        <span style={{ color: "red" }}>*</span>
+                                    </Form.Label>
                                     <Form.Control
                                         type="date"
                                         placeholder="mm/dd/yyyy"
@@ -647,7 +673,10 @@ export default function RegistrarNewStudent() {
                                     />
                                 </Form.Group>
                                 <Form.Group className="mb-3">
-                                    <Form.Label>Nationality*</Form.Label>
+                                    <Form.Label>
+                                        Nationality
+                                        <span style={{ color: "red" }}>*</span>
+                                    </Form.Label>
                                     <Form.Control
                                         type="text"
                                         placeholder="Ex. Filipino"
@@ -655,7 +684,10 @@ export default function RegistrarNewStudent() {
                                     />
                                 </Form.Group>
                                 <Form.Group className="mb-3">
-                                    <Form.Label>Municipality*</Form.Label>
+                                    <Form.Label>
+                                        Municipality
+                                        <span style={{ color: "red" }}>*</span>
+                                    </Form.Label>
                                     <Form.Control
                                         type="text"
                                         placeholder="Ex. Umingan"
@@ -663,7 +695,10 @@ export default function RegistrarNewStudent() {
                                     />
                                 </Form.Group>
                                 <Form.Group className="mb-3">
-                                    <Form.Label>Province*</Form.Label>
+                                    <Form.Label>
+                                        Province
+                                        <span style={{ color: "red" }}>*</span>
+                                    </Form.Label>
                                     <Form.Control
                                         type="text"
                                         placeholder="Ex. Pangasinan"
@@ -671,7 +706,10 @@ export default function RegistrarNewStudent() {
                                     />
                                 </Form.Group>
                                 <Form.Group className="mb-3">
-                                    <Form.Label>GENDER*</Form.Label>
+                                    <Form.Label>
+                                        GENDER
+                                        <span style={{ color: "red" }}>*</span>
+                                    </Form.Label>
                                     <Form.Select ref={genderRef}>
                                         <option value="">Select Gender</option>
                                         <option value="male">Male</option>
@@ -679,7 +717,10 @@ export default function RegistrarNewStudent() {
                                     </Form.Select>
                                 </Form.Group>
                                 <Form.Group className="mb-3">
-                                    <Form.Label>RELIGION*</Form.Label>
+                                    <Form.Label>
+                                        RELIGION
+                                        <span style={{ color: "red" }}>*</span>
+                                    </Form.Label>
                                     <Form.Control
                                         type="text"
                                         placeholder="Ex. Catholic"
@@ -693,16 +734,36 @@ export default function RegistrarNewStudent() {
                             <div className="d-flex flex-wrap gap-5 border p-3 border-2 rounded">
                                 <Form.Group className="mb-3">
                                     <Form.Label>
-                                        Contact Number of the Student*
+                                        Contact Number of the Student
+                                        <span style={{ color: "red" }}>*</span>
                                     </Form.Label>
                                     <Form.Control
                                         type="text"
                                         placeholder="Ex. 09212347896"
+                                        maxLength="11"
                                         ref={contactRef}
+                                        onChange={(e) => {
+                                            let value = e.target.value;
+
+                                            // Ensure only numbers and starts with "09"
+                                            if (!value.startsWith("09")) {
+                                                value = "09"; // Enforce "09" at the start
+                                            }
+
+                                            // Remove non-numeric characters and limit to 11 characters
+                                            value = value
+                                                .replace(/\D/g, "")
+                                                .slice(0, 11);
+
+                                            e.target.value = value;
+                                        }}
                                     />
                                 </Form.Group>
                                 <Form.Group className="mb-3">
-                                    <Form.Label>Email Address*</Form.Label>
+                                    <Form.Label>
+                                        Email Address
+                                        <span style={{ color: "red" }}>*</span>
+                                    </Form.Label>
                                     <Form.Control
                                         type="text"
                                         placeholder="Ex. juandelacruz@gmail.com"
@@ -711,7 +772,8 @@ export default function RegistrarNewStudent() {
                                 </Form.Group>
                                 <Form.Group className="mb-3">
                                     <Form.Label>
-                                        Social Media Account*
+                                        Social Media Account
+                                        <span style={{ color: "red" }}>*</span>
                                     </Form.Label>
                                     <Form.Control
                                         type="text"
@@ -725,7 +787,10 @@ export default function RegistrarNewStudent() {
                             <h3 className="mt-4">PARENTS FATHER'S NAME:</h3>
                             <div className="d-flex flex-wrap gap-5 border p-3 border-2 rounded">
                                 <Form.Group className="mb-3">
-                                    <Form.Label>FATHER'S NAME*</Form.Label>
+                                    <Form.Label>
+                                        FATHER'S NAME
+                                        <span style={{ color: "red" }}>*</span>
+                                    </Form.Label>
                                     <Form.Control
                                         type="text"
                                         placeholder="Ex. Pedro Dela Cruz"
@@ -733,7 +798,10 @@ export default function RegistrarNewStudent() {
                                     />
                                 </Form.Group>
                                 <Form.Group className="mb-3">
-                                    <Form.Label>OCCUPATION*</Form.Label>
+                                    <Form.Label>
+                                        OCCUPATION
+                                        <span style={{ color: "red" }}>*</span>
+                                    </Form.Label>
                                     <Form.Control
                                         type="text"
                                         placeholder="Ex. Farming"
@@ -741,11 +809,29 @@ export default function RegistrarNewStudent() {
                                     />
                                 </Form.Group>
                                 <Form.Group className="mb-3">
-                                    <Form.Label>Contact Number*</Form.Label>
+                                    <Form.Label>
+                                        Contact Number
+                                        <span style={{ color: "red" }}>*</span>
+                                    </Form.Label>
                                     <Form.Control
                                         type="text"
                                         placeholder="Ex. 09214569876"
                                         ref={fathercontactRef}
+                                        onChange={(e) => {
+                                            let value = e.target.value;
+
+                                            // Ensure only numbers and starts with "09"
+                                            if (!value.startsWith("09")) {
+                                                value = "09"; // Enforce "09" at the start
+                                            }
+
+                                            // Remove non-numeric characters and limit to 11 characters
+                                            value = value
+                                                .replace(/\D/g, "")
+                                                .slice(0, 11);
+
+                                            e.target.value = value;
+                                        }}
                                     />
                                 </Form.Group>
                                 <Form.Group className="mb-3">
@@ -762,7 +848,7 @@ export default function RegistrarNewStudent() {
                                     <Form.Label>Email Address</Form.Label>
                                     <Form.Control
                                         type="email"
-                                        placeholder="Ex. Pedro Dela Cruz"
+                                        placeholder="Ex. pedro@gmail.com"
                                         ref={fatheremailRef}
                                     />
                                 </Form.Group>
@@ -770,7 +856,10 @@ export default function RegistrarNewStudent() {
                             <h3 className="mt-4">PARENTS MOTHER'S NAME:</h3>
                             <div className="d-flex flex-wrap gap-5 border p-3 border-2 rounded">
                                 <Form.Group className="mb-3">
-                                    <Form.Label>MOTHER'S NAME*</Form.Label>
+                                    <Form.Label>
+                                        MOTHER'S NAME
+                                        <span style={{ color: "red" }}>*</span>
+                                    </Form.Label>
                                     <Form.Control
                                         type="text"
                                         placeholder="Ex.  Susan Dela Cruz"
@@ -778,7 +867,10 @@ export default function RegistrarNewStudent() {
                                     />
                                 </Form.Group>
                                 <Form.Group className="mb-3">
-                                    <Form.Label>OCCUPATION*</Form.Label>
+                                    <Form.Label>
+                                        OCCUPATION
+                                        <span style={{ color: "red" }}>*</span>
+                                    </Form.Label>
                                     <Form.Control
                                         type="text"
                                         placeholder="Ex. Housewife"
@@ -786,11 +878,29 @@ export default function RegistrarNewStudent() {
                                     />
                                 </Form.Group>
                                 <Form.Group className="mb-3">
-                                    <Form.Label>Contact Number*</Form.Label>
+                                    <Form.Label>
+                                        Contact Number
+                                        <span style={{ color: "red" }}>*</span>
+                                    </Form.Label>
                                     <Form.Control
                                         type="text"
                                         placeholder="Ex. 09213458765"
                                         ref={mothercontactRef}
+                                        onChange={(e) => {
+                                            let value = e.target.value;
+
+                                            // Ensure only numbers and starts with "09"
+                                            if (!value.startsWith("09")) {
+                                                value = "09"; // Enforce "09" at the start
+                                            }
+
+                                            // Remove non-numeric characters and limit to 11 characters
+                                            value = value
+                                                .replace(/\D/g, "")
+                                                .slice(0, 11);
+
+                                            e.target.value = value;
+                                        }}
                                     />
                                 </Form.Group>
                                 <Form.Group className="mb-3">
@@ -807,7 +917,7 @@ export default function RegistrarNewStudent() {
                                     <Form.Label>Email Address</Form.Label>
                                     <Form.Control
                                         type="email"
-                                        placeholder="Ex. Pedro Dela Cruz"
+                                        placeholder="Ex. susan@gmail.com"
                                         ref={motheremailRef}
                                     />
                                 </Form.Group>
@@ -815,7 +925,10 @@ export default function RegistrarNewStudent() {
                             <h3 className="mt-4">GUARDIAN'S NAME:</h3>
                             <div className="d-flex flex-wrap gap-5 border p-3 border-2 rounded">
                                 <Form.Group className="mb-3">
-                                    <Form.Label>GUARDIAN'S NAME*</Form.Label>
+                                    <Form.Label>
+                                        GUARDIAN'S NAME
+                                        <span style={{ color: "red" }}>*</span>
+                                    </Form.Label>
                                     <Form.Control
                                         type="text"
                                         placeholder="Ex.  Susan Dela Cruz"
@@ -823,7 +936,10 @@ export default function RegistrarNewStudent() {
                                     />
                                 </Form.Group>
                                 <Form.Group className="mb-3">
-                                    <Form.Label>OCCUPATION*</Form.Label>
+                                    <Form.Label>
+                                        OCCUPATION
+                                        <span style={{ color: "red" }}>*</span>
+                                    </Form.Label>
                                     <Form.Control
                                         type="text"
                                         placeholder="Ex. Housewife"
@@ -831,11 +947,29 @@ export default function RegistrarNewStudent() {
                                     />
                                 </Form.Group>
                                 <Form.Group className="mb-3">
-                                    <Form.Label>Contact Number*</Form.Label>
+                                    <Form.Label>
+                                        Contact Number
+                                        <span style={{ color: "red" }}>*</span>
+                                    </Form.Label>
                                     <Form.Control
                                         type="text"
                                         placeholder="Ex. 09213458765"
                                         ref={guardiancontactRef}
+                                        onChange={(e) => {
+                                            let value = e.target.value;
+
+                                            // Ensure only numbers and starts with "09"
+                                            if (!value.startsWith("09")) {
+                                                value = "09"; // Enforce "09" at the start
+                                            }
+
+                                            // Remove non-numeric characters and limit to 11 characters
+                                            value = value
+                                                .replace(/\D/g, "")
+                                                .slice(0, 11);
+
+                                            e.target.value = value;
+                                        }}
                                     />
                                 </Form.Group>
                                 <Form.Group className="mb-3">
@@ -849,10 +983,13 @@ export default function RegistrarNewStudent() {
                                     />
                                 </Form.Group>
                                 <Form.Group className="mb-3">
-                                    <Form.Label>Email Address*</Form.Label>
+                                    <Form.Label>
+                                        Email Address
+                                        <span style={{ color: "red" }}>*</span>
+                                    </Form.Label>
                                     <Form.Control
                                         type="email"
-                                        placeholder="Ex. Pedro Dela Cruz"
+                                        placeholder="Ex. susan@gmail.com"
                                         ref={guardianemailRef}
                                     />
                                 </Form.Group>
@@ -864,7 +1001,10 @@ export default function RegistrarNewStudent() {
                             </h3>
                             <div className="d-flex flex-wrap gap-5 border p-3 border-2 rounded">
                                 <Form.Group className="mb-3">
-                                    <Form.Label>School Name*</Form.Label>
+                                    <Form.Label>
+                                        School Name
+                                        <span style={{ color: "red" }}>*</span>
+                                    </Form.Label>
                                     <Form.Control
                                         type="text"
                                         placeholder="Ex. Flores NHS"
@@ -872,7 +1012,10 @@ export default function RegistrarNewStudent() {
                                     />
                                 </Form.Group>
                                 <Form.Group className="mb-3">
-                                    <Form.Label>School Address*</Form.Label>
+                                    <Form.Label>
+                                        School Address
+                                        <span style={{ color: "red" }}>*</span>
+                                    </Form.Label>
                                     <Form.Control
                                         type="text"
                                         placeholder="Ex. Flores, Umingan, Pang."

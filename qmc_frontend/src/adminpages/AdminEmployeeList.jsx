@@ -12,7 +12,6 @@ import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import AdminEmployeeView from "../components/admin/AdminEmployeeView";
 import AdminEmployeeEdit from "../components/admin/AdminEmployeeEdit";
-import Confirmationload from "../components/Confirmationload";
 
 import ZoomInIcon from "@mui/icons-material/ZoomIn";
 import EditIcon from "@mui/icons-material/Edit";
@@ -23,6 +22,8 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { Button, Spinner } from "react-bootstrap";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
+import ConfirmationArchived from "../components/ConfirmationArchived";
+import ConfirmationLoad from "../components/ConfirmationLoad";
 
 export default function AdminEmployeeList() {
     const [password, setPassword] = useState("");
@@ -59,6 +60,7 @@ export default function AdminEmployeeList() {
     const employeeTypeRef = useRef();
     const searchRef = useRef();
     const imageRef = useRef();
+    const hiredDateRef = useRef();
 
     const handleShowView = () => {
         setShowEmployee(true);
@@ -110,7 +112,7 @@ export default function AdminEmployeeList() {
         if (imageRef.current.files[0]) {
             formData.append("image", imageRef.current.files[0]);
         }
-
+        formData.append("hired_date", hiredDateRef.current.value); // Get value from the hired date input field
         if (
             formData.get("email") &&
             formData.get("password") &&
@@ -295,8 +297,6 @@ export default function AdminEmployeeList() {
         axiosClientAdmin
             .post(`/employee/reset/password/${idConfirm}`, payload)
             .then(() => {
-                console.log(idConfirm);
-                console.log("success");
                 setPassword(newPassword);
                 handleCloseResetPass();
                 setShowPass(true);
@@ -304,18 +304,27 @@ export default function AdminEmployeeList() {
             .finally(() => setSubmitLoading(false));
     };
 
-    const archive = () => {
+    const archive = (remarkType, remarkDate) => {
         setSubmitLoading(true);
 
+        // Create the remark based on the type and date
+        const remark = `${remarkType} on ${
+            remarkDate || new Date().toLocaleDateString()
+        }`;
+
         axiosClientAdmin
-            .delete(`/employees/${idConfirm}`)
+            .delete(`/employees/${idConfirm}`, {
+                data: {
+                    remarks: remark, // Include the remark data
+                },
+            })
             .then(() => {
-                console.log("test");
+                console.log("Employee archived");
                 getEmployees();
                 handleCloseConfirm();
             })
             .catch(() => {
-                console.log("error");
+                console.log("Error archiving employee");
             })
             .finally(() => setSubmitLoading(false));
     };
@@ -507,6 +516,8 @@ export default function AdminEmployeeList() {
                                                                 address:
                                                                     data.address,
                                                                 type: data.type,
+                                                                services:
+                                                                    data.service_records,
                                                             });
                                                             handleShowView();
                                                         }}
@@ -667,7 +678,9 @@ export default function AdminEmployeeList() {
                 <Modal.Body>
                     <div className="alert alert-warning" role="alert">
                         <small>
-                            Fields marked with an asterisk (*) are required.
+                            Fields marked with an asterisk (
+                            <span style={{ color: "red" }}>*</span>) are
+                            required.
                         </small>
                     </div>
 
@@ -684,7 +697,10 @@ export default function AdminEmployeeList() {
                             className="mb-3"
                             controlId="exampleForm.ControlInput1"
                         >
-                            <Form.Label>Email address*</Form.Label>
+                            <Form.Label>
+                                Email address{" "}
+                                <span style={{ color: "red" }}>*</span>
+                            </Form.Label>
                             <Form.Control
                                 ref={emailRef}
                                 type="email"
@@ -696,7 +712,10 @@ export default function AdminEmployeeList() {
                             className="mb-3"
                             controlId="exampleForm.ControlInput1"
                         >
-                            <Form.Label>First Name*</Form.Label>
+                            <Form.Label>
+                                First Name
+                                <span style={{ color: "red" }}>*</span>
+                            </Form.Label>
                             <Form.Control
                                 ref={fnameRef}
                                 type="text"
@@ -720,7 +739,10 @@ export default function AdminEmployeeList() {
                             className="mb-3"
                             controlId="exampleForm.ControlInput1"
                         >
-                            <Form.Label>Last Name*</Form.Label>
+                            <Form.Label>
+                                Last Name{" "}
+                                <span style={{ color: "red" }}>*</span>
+                            </Form.Label>
                             <Form.Control
                                 ref={lnameRef}
                                 type="text"
@@ -744,7 +766,9 @@ export default function AdminEmployeeList() {
                             className="mb-3"
                             controlId="exampleForm.ControlInput1"
                         >
-                            <Form.Label>Address*</Form.Label>
+                            <Form.Label>
+                                Address<span style={{ color: "red" }}>*</span>
+                            </Form.Label>
                             <Form.Control
                                 ref={addressRef}
                                 type="text"
@@ -756,7 +780,10 @@ export default function AdminEmployeeList() {
                             className="mb-3"
                             controlId="exampleForm.ControlInput1"
                         >
-                            <Form.Label>Employee Type*</Form.Label>
+                            <Form.Label>
+                                Employee Type{" "}
+                                <span style={{ color: "red" }}>*</span>
+                            </Form.Label>
                             <Form.Select ref={employeeTypeRef}>
                                 <option value="">Select Employee Type</option>
                                 <option value="Principal">Principal</option>
@@ -764,6 +791,20 @@ export default function AdminEmployeeList() {
                                 <option value="Registrar">Registrar</option>
                                 <option value="Teacher">Teacher</option>
                             </Form.Select>
+                        </Form.Group>
+                        <Form.Group className="mb-3" controlId="hiredDateInput">
+                            <Form.Label>
+                                Date Hired{" "}
+                                <span style={{ color: "red" }}>*</span>
+                            </Form.Label>
+                            <Form.Control
+                                ref={hiredDateRef}
+                                type="date"
+                                placeholder="Select Hire Date"
+                                defaultValue={
+                                    new Date().toISOString().split("T")[0]
+                                } // Default to today's date
+                            />
                         </Form.Group>
                     </Form>
                 </Modal.Body>
@@ -830,6 +871,7 @@ export default function AdminEmployeeList() {
                     address={employeeView.address}
                     type={employeeView.type}
                     extension_name={employeeView.extension_name}
+                    service={employeeView.services}
                 />
             )}
 
@@ -849,7 +891,7 @@ export default function AdminEmployeeList() {
                 />
             )}
 
-            <Confirmationload
+            <ConfirmationLoad
                 show={showRsetConfirm}
                 onHide={handleCloseResetPass}
                 confirm={resetPassword}
@@ -859,7 +901,17 @@ export default function AdminEmployeeList() {
                 loading={submitLoading}
             />
 
-            <Confirmationload
+            {/* <Confirmationload
+                show={showConfirm}
+                onHide={handleCloseConfirm}
+                confirm={archive}
+                title={
+                    "Archiving this employee will deactivate their account and restrict access to all system features. Ensure that all necessary data is backed up and that you have communicated this change to the employee before proceeding."
+                }
+                loading={submitLoading}
+            /> */}
+
+            <ConfirmationArchived
                 show={showConfirm}
                 onHide={handleCloseConfirm}
                 confirm={archive}

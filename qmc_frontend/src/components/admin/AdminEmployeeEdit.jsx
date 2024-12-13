@@ -127,7 +127,10 @@ export default function AdminEmployeeEdit({
                             />
                         </Form.Group>
                         <Form.Group className="mb-3">
-                            <Form.Label>Email address*</Form.Label>
+                            <Form.Label>
+                                Email address{" "}
+                                <span style={{ color: "red" }}>*</span>
+                            </Form.Label>
                             <Form.Control
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
@@ -136,7 +139,10 @@ export default function AdminEmployeeEdit({
                             />
                         </Form.Group>
                         <Form.Group className="mb-3">
-                            <Form.Label>First Name*</Form.Label>
+                            <Form.Label>
+                                First Name{" "}
+                                <span style={{ color: "red" }}>*</span>
+                            </Form.Label>
                             <Form.Control
                                 value={fname}
                                 onChange={(e) => setFname(e.target.value)}
@@ -154,7 +160,10 @@ export default function AdminEmployeeEdit({
                             />
                         </Form.Group>
                         <Form.Group className="mb-3">
-                            <Form.Label>Last Name*</Form.Label>
+                            <Form.Label>
+                                Last Name{" "}
+                                <span style={{ color: "red" }}>*</span>
+                            </Form.Label>
                             <Form.Control
                                 value={lname}
                                 onChange={(e) => setLname(e.target.value)}
@@ -175,7 +184,9 @@ export default function AdminEmployeeEdit({
                             />
                         </Form.Group>
                         <Form.Group className="mb-3">
-                            <Form.Label>Address*</Form.Label>
+                            <Form.Label>
+                                Address <span style={{ color: "red" }}>*</span>
+                            </Form.Label>
                             <Form.Control
                                 value={address}
                                 onChange={(e) => setAddress(e.target.value)}
@@ -184,7 +195,10 @@ export default function AdminEmployeeEdit({
                             />
                         </Form.Group>
                         <Form.Group className="mb-3">
-                            <Form.Label>Employee Type*</Form.Label>
+                            <Form.Label>
+                                Employee Type{" "}
+                                <span style={{ color: "red" }}>*</span>
+                            </Form.Label>
                             <Form.Select
                                 value={type}
                                 onChange={(e) => setType(e.target.value)}

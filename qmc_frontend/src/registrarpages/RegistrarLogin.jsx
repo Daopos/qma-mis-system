@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
 import "../assets/css/access.css";
-import { Navigate, useNavigate } from "react-router-dom";
+import { Navigate, useNavigate, Link } from "react-router-dom";
 import axiosClientRegistrar from "../axoisclient/axios-client-registrar";
 import { useStateContext } from "../context/ContextProvider";
 import { ToastContainer, toast } from "react-toastify";
@@ -144,8 +144,16 @@ export default function RegistrarLogin() {
                                 placeholder="Enter your password"
                                 disabled={loading}
                             />
+                            <Link
+                                to="/resetform/employee"
+                                style={{
+                                    fontSize: "14px",
+                                    textDecoration: "none",
+                                }}
+                            >
+                                Forgot Password?
+                            </Link>
                         </div>
-
                         <button
                             type="submit"
                             variant="primary"

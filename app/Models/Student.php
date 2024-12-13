@@ -63,6 +63,7 @@ class Student extends Model
         'guardian_email',
         'father_email',
         'activation',
+        'other',
     ];
 
     /**

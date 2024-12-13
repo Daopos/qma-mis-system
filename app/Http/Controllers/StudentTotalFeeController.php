@@ -12,6 +12,7 @@ use App\Models\StudentPayment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class StudentTotalFeeController extends Controller
 {
@@ -165,13 +166,16 @@ class StudentTotalFeeController extends Controller
         // Update the total fee
         $studentTotalFee->update(['total_fee' => $newTotalFee]);
 
+        $transactionNumber = 'TRX' . sprintf('%06d', StudentPayment::max('id') + 1);
+
         // Create a new StudentPayment record
         StudentPayment::create([
             'student_id' => $studentId,
             'amount' => $paymentAmount,
             'desc' => $desc,
             'encoder' => $encoder, // Encoder's full name
-            'academic_year' => $activeAcademicYear->academic_year // Add active academic year
+            'academic_year' => $activeAcademicYear->academic_year, // Add active academic year
+            'transaction_number' => $transactionNumber // Generate a unique transaction number
         ]);
 
         // Construct the student's full name
@@ -184,7 +188,7 @@ class StudentTotalFeeController extends Controller
             'user_level' => 'Finance', // Adjust this according to your user levels
         ]);
 
-        return response()->json(['message' => 'Payment successfully recorded']);
+        return response()->json(['message' => 'Payment successfully recorded','transaction_number' => $transactionNumber,]);
     }
 
     public function getStudentBalance($id)

@@ -1,70 +1,94 @@
-import { useLocation } from "react-router-dom";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useImperativeHandle } from "react";
 import html2pdf from "html2pdf.js";
 import axiosClientPrincipal from "../../axoisclient/axios-client-principal";
 import Table from "react-bootstrap/Table";
 import { Col, Container, Row } from "react-bootstrap";
 
-export default function PdfClassSubjects() {
-    const location = useLocation();
-    const { classId, className, grade } = location.state || {
-        classId: "",
-        className: "",
-        grade: "",
-    }; // default to empty if not set
+const PdfClassSubjects = (props, ref) => {
+    const { classId, className, grade } = props;
     const pdfRef = useRef();
     const [subjects, setSubjects] = useState([]);
-    const [pdfGenerated, setPdfGenerated] = useState(false); // State to track if PDF has been generated
+    const [isLoading, setIsLoading] = useState(false); // For loading state
+    const [pdfGenerated, setPdfGenerated] = useState(false);
 
-    // Function to fetch student list
-    const getSubjectList = () => {
-        axiosClientPrincipal
-            .get(`/class/subjects/${classId}`)
-            .then(({ data }) => {
-                setSubjects(data.subjects);
-            })
-            .catch((error) => {
-                console.error("Error fetching subjects:", error);
-            });
+    // Fetch subject list
+    const getSubjectList = async () => {
+        setIsLoading(true);
+        try {
+            const { data } = await axiosClientPrincipal.get(
+                `/class/subjects/${classId}`
+            );
+            setSubjects(data.subjects || []);
+        } catch (error) {
+            console.error("Error fetching subjects:", error);
+            setSubjects([]);
+        } finally {
+            setIsLoading(false);
+        }
     };
 
-    // Fetch the student list when component mounts
+    // Reset and fetch subjects when classId or grade changes
     useEffect(() => {
-        getSubjectList();
-    }, [classId]);
+        if (classId) {
+            setSubjects([]); // Clear existing data
+            setPdfGenerated(false); // Reset PDF flag
+            getSubjectList();
+        }
+    }, [classId, grade]);
 
-    // Function to generate the PDF
+    // Generate the PDF
     const generatePDF = () => {
         const element = pdfRef.current;
-
-        // Generate the PDF as a blob
         html2pdf()
             .from(element)
+            .set({
+                margin: [5, 0, 32, 0],
+            })
             .toPdf()
             .get("pdf")
             .then((pdf) => {
-                // Create a blob URL
                 const blob = pdf.output("blob");
                 const url = URL.createObjectURL(blob);
 
-                // Open the PDF in a new tab
-                window.open(url);
+                const iframe = document.createElement("iframe");
+                iframe.style.position = "absolute";
+                iframe.style.width = "0px";
+                iframe.style.height = "0px";
+                iframe.style.border = "none";
+                iframe.src = url;
+                document.body.appendChild(iframe);
+
+                iframe.contentWindow.print();
+                window.close();
             });
     };
 
-    // Generate PDF once the student list is loaded and not already generated
+    // Trigger PDF generation only when subjects are ready
     useEffect(() => {
         if (subjects.length > 0 && !pdfGenerated) {
             generatePDF();
-            setPdfGenerated(true); // Mark PDF as generated
+            setPdfGenerated(true);
         }
-    }, [subjects, pdfGenerated]); // Add pdfGenerated to dependency array
+    }, [subjects, pdfGenerated]);
+
+    // Expose the resetAndPrint method
+    useImperativeHandle(ref, () => ({
+        resetAndPrint: () => {
+            setSubjects([]); // Clear current subjects
+            setPdfGenerated(false); // Reset PDF generation
+            getSubjectList(); // Fetch new data
+        },
+    }));
+
+    if (isLoading) {
+        return <div>Loading...</div>; // Show loading state
+    }
 
     return (
         <div>
             <div ref={pdfRef}>
                 <div className="d-flex justify-content-center gap-2 p-4">
-                    <img src="/public/img/logo.png" alt="" width={100} />
+                    <img src="/img/logo.png" alt="" width={100} />
                     <div className="d-flex flex-column justify-content-center align-items-center">
                         <h3>QUEZON MEMORIAL ACADEMY</h3>
                         <h6>Umingan, Pangasinan</h6>
@@ -88,27 +112,67 @@ export default function PdfClassSubjects() {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {subjects.map((subject, index) => (
-                                        <tr key={subject.id}>
-                                            <td>{index + 1}</td>
-                                            <td>{subject.title}</td>
-                                            <td>
-                                                {`${data.student.surname}, ${
-                                                    data.student.firstname
-                                                }${
-                                                    data.student.middlename
-                                                        ? `, ${data.student.middlename.charAt(
-                                                              0
-                                                          )}.`
-                                                        : ""
-                                                }${
-                                                    data.student.extension_name
-                                                        ? ` ${data.student.extension_name}`
-                                                        : ""
-                                                }`}
+                                    {subjects.length === 0 ? (
+                                        <tr>
+                                            <td
+                                                colSpan="4"
+                                                className="text-center"
+                                            >
+                                                No Subjects Available
                                             </td>
                                         </tr>
-                                    ))}
+                                    ) : (
+                                        subjects.map((subject, index) => (
+                                            <tr key={subject.id}>
+                                                <td>{index + 1}</td>
+                                                <td>{subject.title}</td>
+                                                <td>
+                                                    {subject.schedules &&
+                                                    subject.schedules.length >
+                                                        0 ? (
+                                                        subject.schedules.map(
+                                                            (schedule) => (
+                                                                <div
+                                                                    key={
+                                                                        schedule.id
+                                                                    }
+                                                                >
+                                                                    {
+                                                                        schedule.day
+                                                                    }{" "}
+                                                                    -{" "}
+                                                                    {
+                                                                        schedule.start
+                                                                    }{" "}
+                                                                    to{" "}
+                                                                    {
+                                                                        schedule.end
+                                                                    }
+                                                                </div>
+                                                            )
+                                                        )
+                                                    ) : (
+                                                        <div>No Schedules</div>
+                                                    )}
+                                                </td>
+                                                <td>
+                                                    {`${
+                                                        subject.teacher_lname ||
+                                                        ""
+                                                    }, ${
+                                                        subject.teacher_fname ||
+                                                        ""
+                                                    }, ${
+                                                        subject.teacher_mname
+                                                            ? subject.teacher_mname.charAt(
+                                                                  0
+                                                              )
+                                                            : ""
+                                                    }`}
+                                                </td>
+                                            </tr>
+                                        ))
+                                    )}
                                 </tbody>
                             </Table>
                         </Col>
@@ -117,4 +181,6 @@ export default function PdfClassSubjects() {
             </div>
         </div>
     );
-}
+};
+
+export default React.forwardRef(PdfClassSubjects);

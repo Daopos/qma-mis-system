@@ -1,9 +1,10 @@
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useImperativeHandle } from "react";
 import html2pdf from "html2pdf.js";
 import axiosClientRegistrar from "../../axoisclient/axios-client-registrar";
 import Table from "react-bootstrap/Table";
+import "./printable.css"; // Import a CSS file for custom styles
 
-export default function PrintNoReport() {
+const PrintNoReport = (props, ref) => {
     const pdfRef = useRef();
     const [studentList, setStudentList] = useState([]);
     const [pdfGenerated, setPdfGenerated] = useState(false); // State to track if PDF has been generated
@@ -23,33 +24,31 @@ export default function PrintNoReport() {
             });
     };
 
-    useEffect(() => {
-        getStudentList();
-    }, []);
-
     const generatePDF = () => {
         const element = pdfRef.current;
 
         html2pdf()
             .from(element)
+            .set({
+                margin: [5, 0, 32, 0], // top, left, bottom, right margins
+            })
             .toPdf()
             .get("pdf")
             .then((pdf) => {
                 const blob = pdf.output("blob");
                 const url = URL.createObjectURL(blob);
-                console.log("Generated PDF Blob URL:", url);
 
-                // Attempt to open the PDF in a new tab
-                const newTab = window.open(url);
-                if (!newTab) {
-                    // Fallback to download if new tab fails to open
-                    const link = document.createElement("a");
-                    link.href = url;
-                    link.download = "student_report.pdf";
-                    document.body.appendChild(link);
-                    link.click();
-                    document.body.removeChild(link);
-                }
+                // Open the print dialog directly
+                const iframe = document.createElement("iframe");
+                iframe.style.position = "absolute";
+                iframe.style.width = "0px";
+                iframe.style.height = "0px";
+                iframe.style.border = "none";
+                iframe.src = url;
+                document.body.appendChild(iframe);
+
+                // Trigger the print dialog
+                iframe.contentWindow.print();
 
                 // Close the current page
                 window.close();
@@ -57,11 +56,23 @@ export default function PrintNoReport() {
     };
 
     useEffect(() => {
+        getStudentList();
+    }, []);
+
+    useEffect(() => {
         if (studentList.length > 0 && !pdfGenerated) {
             generatePDF();
             setPdfGenerated(true); // Mark PDF as generated
         }
     }, [studentList, pdfGenerated]);
+
+    // Expose the reset and print method to the parent component
+    useImperativeHandle(ref, () => ({
+        resetAndPrint: () => {
+            setPdfGenerated(false); // Reset the state before generating the PDF again
+            getStudentList(); // Re-fetch the student list to trigger PDF generation
+        },
+    }));
 
     return (
         <div>
@@ -105,4 +116,6 @@ export default function PrintNoReport() {
             </div>
         </div>
     );
-}
+};
+
+export default React.forwardRef(PrintNoReport);

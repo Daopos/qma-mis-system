@@ -91,7 +91,11 @@ export default function StudentSoa() {
                         fontWeight: "bold",
                     }}
                 >
-                    ₱{balance?.toLocaleString() || "0"}
+                    ₱
+                    {parseFloat(balance).toLocaleString(undefined, {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                    }) || "0"}
                 </h3>
             </div>
 
@@ -104,6 +108,7 @@ export default function StudentSoa() {
                             <th>Description</th>
                             <th>Amount</th>
                             <th>Encoder</th>
+                            <th>Tr. No.</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -141,10 +146,18 @@ export default function StudentSoa() {
                                             </td>
                                             <td data-label="Amount">
                                                 ₱
-                                                {payment.amount.toLocaleString()}
+                                                {parseFloat(
+                                                    payment.amount
+                                                ).toLocaleString(undefined, {
+                                                    minimumFractionDigits: 2,
+                                                    maximumFractionDigits: 2,
+                                                })}
                                             </td>
                                             <td data-label="Encoder">
                                                 {payment.encoder}
+                                            </td>
+                                            <td data-label="Tr. No.">
+                                                {payment.transaction_number}
                                             </td>
                                         </tr>
                                     )

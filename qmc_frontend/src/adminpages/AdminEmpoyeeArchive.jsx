@@ -7,6 +7,7 @@ import { ToastContainer, toast } from "react-toastify";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import ConfirmationLoad from "../components/ConfirmationLoad";
+import AdminEmployeeView from "../components/admin/AdminEmployeeView";
 
 export default function AdminEmpoyeeArchive() {
     const [employees, setEmployees] = useState([]);
@@ -24,11 +25,19 @@ export default function AdminEmpoyeeArchive() {
     const [DeleteId, setDeleteId] = useState(null);
 
     const searchRef = useRef();
+    const [showEmployee, setShowEmployee] = useState(false);
+    const [employeeView, setEmployeeView] = useState();
 
     const [buttonLoading, setButtonLoading] = useState(false);
 
+    const handleShowView = () => {
+        setShowEmployee(true);
+    };
+    const handleCloseView = () => setShowEmployee(false);
+
     const getEmployees = () => {
         axiosClientAdmin.get("/employee/archive").then(({ data }) => {
+            console.log(data.employees);
             setEmployees(data.employees);
             setFilteredEmployees(data.employees); // Initialize with all employees
         });
@@ -317,6 +326,28 @@ export default function AdminEmpoyeeArchive() {
                                             <td>{data.type}</td>
                                             <td>
                                                 <button
+                                                    className="button-list button-green"
+                                                    onClick={() => {
+                                                        setEmployeeView({
+                                                            image: data.image_url,
+                                                            email: data.email,
+                                                            fname: data.fname,
+                                                            extension_name:
+                                                                data.extension_name,
+                                                            mname: data.mname,
+                                                            lname: data.lname,
+                                                            address:
+                                                                data.address,
+                                                            type: data.type,
+                                                            services:
+                                                                data.service_records,
+                                                        });
+                                                        handleShowView();
+                                                    }}
+                                                >
+                                                    View
+                                                </button>
+                                                <button
                                                     className="button-list button-blue"
                                                     onClick={() =>
                                                         handleShowRecover(
@@ -378,6 +409,22 @@ export default function AdminEmpoyeeArchive() {
                 </Button>
             </div>
             <ToastContainer limit={1} />
+
+            {employeeView && (
+                <AdminEmployeeView
+                    show={showEmployee}
+                    onHide={handleCloseView}
+                    image={employeeView.image}
+                    email={employeeView.email}
+                    fname={employeeView.fname}
+                    mname={employeeView.mname}
+                    lname={employeeView.lname}
+                    address={employeeView.address}
+                    type={employeeView.type}
+                    extension_name={employeeView.extension_name}
+                    service={employeeView.services}
+                />
+            )}
 
             <ConfirmationLoad
                 show={showRecover}

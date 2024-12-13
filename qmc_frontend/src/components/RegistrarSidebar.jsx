@@ -6,6 +6,7 @@ import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import SchoolIcon from "@mui/icons-material/School";
 import ArchiveIcon from "@mui/icons-material/Archive";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import ClassIcon from "@mui/icons-material/Class";
 
 const SidebarLink = ({ to, Icon, label, count }) => {
     const { pathname } = useLocation();
@@ -82,10 +83,16 @@ export default function RegistrarSidebar() {
             // count: readyEnrollCount, // Add count here if applicable
         },
         {
+            to: "/registrar/classrooms",
+            Icon: ClassIcon,
+            label: "Classrooms",
+        },
+        {
             to: "/registrar/profile",
             Icon: AccountCircleIcon,
             label: "Profile",
         },
+
         {
             to: "/registrar/archives",
             Icon: ArchiveIcon,

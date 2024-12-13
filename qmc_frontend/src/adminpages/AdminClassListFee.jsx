@@ -300,7 +300,13 @@ export default function AdminClassListFee() {
                                                 Grade {item.gradetype}
                                             </td>
                                             <td data-label="Total Fee">
-                                                {item.totalAmount}
+                                                {item.totalAmount.toLocaleString(
+                                                    undefined,
+                                                    {
+                                                        minimumFractionDigits: 2,
+                                                        maximumFractionDigits: 2,
+                                                    }
+                                                )}
                                             </td>
                                             <td data-label="Option">
                                                 <button
@@ -496,7 +502,13 @@ export default function AdminClassListFee() {
                                             value={
                                                 editIndex === index
                                                     ? editableFee.amount
-                                                    : fee.amount
+                                                    : fee.amount.toLocaleString(
+                                                          undefined,
+                                                          {
+                                                              minimumFractionDigits: 2,
+                                                              maximumFractionDigits: 2,
+                                                          }
+                                                      )
                                             }
                                             onChange={(e) => {
                                                 const value = e.target.value;

@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import { useStateContext } from "../context/ContextProvider";
 import axiosClientFinance from "../axoisclient/axios-client-finance";
 import { ToastContainer, toast } from "react-toastify";
@@ -144,6 +144,15 @@ export default function FinanceLogin() {
                                     type="password"
                                     placeholder="Enter your password"
                                 />
+                                <Link
+                                    to="/resetform/employee"
+                                    style={{
+                                        fontSize: "14px",
+                                        textDecoration: "none",
+                                    }}
+                                >
+                                    Forgot Password?
+                                </Link>
                             </div>
 
                             <button

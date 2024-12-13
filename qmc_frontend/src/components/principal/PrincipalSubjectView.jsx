@@ -184,6 +184,8 @@ export default function PrincipalSubjectView({ show, onHide, classId }) {
                                         <Form.Control
                                             name="start"
                                             type="time"
+                                            min="00:00" // Minimum time: 00:00
+                                            max="23:59" // Maximum time: 23:59
                                             value={schedule.start}
                                             onChange={(e) =>
                                                 handleScheduleChange(index, e)

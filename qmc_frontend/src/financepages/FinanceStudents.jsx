@@ -18,6 +18,7 @@ import FinanceReceipt from "../components/finance/FinanceReceipt";
 import Dropdown from "react-bootstrap/Dropdown";
 import DropdownButton from "react-bootstrap/DropdownButton";
 import { useQuery } from "react-query";
+import PrintWithBalance from "../components/finance/PrintWithBalance";
 
 export default function FinanceStudents() {
     const [students, setStudents] = useState([]);
@@ -55,6 +56,8 @@ export default function FinanceStudents() {
     const [loading, setLoading] = useState(false);
 
     const [studentId, setStudentId] = useState("");
+
+    const printRef = useRef();
 
     const {
         data: profile = {},
@@ -126,6 +129,7 @@ export default function FinanceStudents() {
         axiosClientFinance
             .get(`/student/payment/history/${id}`)
             .then(({ data }) => {
+                console.log(data);
                 setPaymentHistory(data);
             })
             .catch((err) => console.log(err));
@@ -137,8 +141,13 @@ export default function FinanceStudents() {
             0
         );
 
-        return totalAmount;
+        return totalAmount.toLocaleString(undefined, {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+        });
     };
+
+    const [transactionNumber, setTransactionNumber] = useState("");
 
     const payFee = (id) => {
         const feesToUpdate = studentFee.map((fee) => ({
@@ -157,7 +166,9 @@ export default function FinanceStudents() {
 
         axiosClientFinance
             .post(`/finance/makepayment`, payload)
-            .then(() => {
+            .then((response) => {
+                setTransactionNumber(response.data.transaction_number);
+
                 handleCloseBalanceModal();
                 getStudents();
                 printReceipt();
@@ -448,6 +459,15 @@ export default function FinanceStudents() {
         updatePagination("12");
     }, [filteredStudents]);
 
+    const [showPrint, setShowPrint] = useState(false);
+
+    const handlePrintClick = () => {
+        if (printRef.current) {
+            printRef.current.resetAndPrint(); // This will reset and trigger the print
+        }
+        setShowPrint(true);
+    };
+
     return (
         <>
             <div className="list-body-container">
@@ -488,11 +508,7 @@ export default function FinanceStudents() {
                                 title="Report"
                                 variant="secondary"
                             >
-                                <Dropdown.Item
-                                    href="/printstudentwithbalance"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                >
+                                <Dropdown.Item onClick={handlePrintClick}>
                                     Students with Balance
                                 </Dropdown.Item>
                             </DropdownButton>
@@ -575,7 +591,12 @@ export default function FinanceStudents() {
                             </h5>
                             <h5 className="font-weight-bold">
                                 Remaining Balance:&nbsp;
-                                {studentFeeDetails.total_fee}
+                                {parseFloat(
+                                    studentFeeDetails.total_fee
+                                ).toLocaleString(undefined, {
+                                    minimumFractionDigits: 2,
+                                    maximumFractionDigits: 2,
+                                })}
                             </h5>
 
                             <div className="mt-4">
@@ -624,7 +645,17 @@ export default function FinanceStudents() {
                                             {studentFee.map((fee, index) => (
                                                 <tr key={index}>
                                                     <td>{fee.title}</td>
-                                                    <td>{fee.amount}</td>
+                                                    <td>
+                                                        {parseFloat(
+                                                            fee.amount
+                                                        ).toLocaleString(
+                                                            undefined,
+                                                            {
+                                                                minimumFractionDigits: 2,
+                                                                maximumFractionDigits: 2,
+                                                            }
+                                                        )}
+                                                    </td>
                                                 </tr>
                                             ))}
                                             <tr>
@@ -655,6 +686,7 @@ export default function FinanceStudents() {
                                                 <th>Amount</th>
                                                 <th>Encoder</th>
                                                 <th>DateTime</th>
+                                                <th>Tr. No.</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -664,7 +696,7 @@ export default function FinanceStudents() {
                                                         {/* Row for Academic Year */}
                                                         <tr>
                                                             <td
-                                                                colSpan={4}
+                                                                colSpan={5}
                                                                 style={{
                                                                     textAlign:
                                                                         "center",
@@ -696,9 +728,15 @@ export default function FinanceStudents() {
                                                                         }
                                                                     </td>
                                                                     <td>
-                                                                        {
+                                                                        {parseFloat(
                                                                             payment.amount
-                                                                        }
+                                                                        ).toLocaleString(
+                                                                            undefined,
+                                                                            {
+                                                                                minimumFractionDigits: 2,
+                                                                                maximumFractionDigits: 2,
+                                                                            }
+                                                                        )}
                                                                     </td>
                                                                     <td>
                                                                         {
@@ -708,6 +746,11 @@ export default function FinanceStudents() {
                                                                     <td>
                                                                         {
                                                                             payment.created_at
+                                                                        }
+                                                                    </td>
+                                                                    <td>
+                                                                        {
+                                                                            payment.transaction_number
                                                                         }
                                                                     </td>
                                                                 </tr>
@@ -727,7 +770,7 @@ export default function FinanceStudents() {
                                                                 Total Amount
                                                                 Paid:
                                                             </td>
-                                                            <td colSpan={3}>
+                                                            <td colSpan={4}>
                                                                 {yearData.payments
                                                                     .reduce(
                                                                         (
@@ -821,7 +864,9 @@ export default function FinanceStudents() {
                                 ? `, ${studentFeeDetails.middlename.charAt(0)}.`
                                 : "."
                         }`}
+                        transactionNumber={transactionNumber || "Pending"} // Handle undefined case
                     />
+
                     <button
                         onClick={printReceipt}
                         style={{
@@ -836,6 +881,11 @@ export default function FinanceStudents() {
                     >
                         Reprint Receipt
                     </button>
+                </div>
+            )}
+            {showPrint && (
+                <div style={{ display: "none" }}>
+                    <PrintWithBalance ref={printRef} />
                 </div>
             )}
         </>

@@ -13,7 +13,9 @@ class StudentFee extends Model
         'title',
         'amount',
         'student_id',
-        'academic_year'
+        'academic_year',
+        'transaction_number'
+
     ];
 
 

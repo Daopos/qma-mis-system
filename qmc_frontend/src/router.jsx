@@ -93,6 +93,10 @@ import PrintNoReport from "./components/registrar/PrintNoReport";
 import PrintNoTranscript from "./components/registrar/PrintNoTranscript";
 import StudentReviewer from "./studentpages/StudentReviewer";
 import PrintWithBalance from "./components/finance/PrintWithBalance";
+import EmployeeResetForm from "./components/EmployeeResetForm";
+import StudentResetForm from "./components/StudentResetForm";
+import GuardianResetForm from "./components/guardianResetForm";
+import RegistrarClassroom from "./registrarpages/RegistrarClassroom";
 
 const router = createBrowserRouter([
     {
@@ -196,6 +200,10 @@ const router = createBrowserRouter([
             {
                 path: "/registrar/students/archives/:archiveId",
                 element: <RegistrarArchiveStudents />,
+            },
+            {
+                path: "/registrar/classrooms",
+                element: <RegistrarClassroom />,
             },
         ],
     },
@@ -490,6 +498,18 @@ const router = createBrowserRouter([
     {
         path: "/testing",
         element: <StudentReviewer />,
+    },
+    {
+        path: "/resetform/employee",
+        element: <EmployeeResetForm />,
+    },
+    {
+        path: "/resetform/student",
+        element: <StudentResetForm />,
+    },
+    {
+        path: "/resetform/parent",
+        element: <GuardianResetForm />,
     },
 ]);
 

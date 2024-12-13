@@ -106,7 +106,12 @@ export default function ParentDashboard() {
                 <DashboardBox
                     BoxColor="#1C77"
                     title="Balance"
-                    count={balance?.toLocaleString() || "0"}
+                    count={
+                        parseFloat(balance).toLocaleString(undefined, {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2,
+                        }) || "0"
+                    }
                 />
                 <DashboardBox
                     BoxColor="#9E4784"

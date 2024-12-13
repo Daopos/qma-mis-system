@@ -326,3 +326,17 @@ Route::get('/subject/archive/class/{id}', [SubjectController::class, 'showArchiv
 
 //finance report
 Route::get('/student/with/balance', [StudentTotalFeeController::class, 'getStudentWithBalance']);
+
+
+
+//reset password with code
+Route::post('/resetcode/employee', [AuthController::class, 'sendResetCode']);
+Route::post('/resetpass/employee', [AuthController::class, 'resetPasswordCode']);
+Route::post('/resetcode/student', [AuthController::class, 'sendStudentResetCode']);
+Route::post('/resetpass/student', [AuthController::class, 'resetStudentPasswordCode']);
+Route::post('/resetcode/parent', [AuthController::class, 'sendParentResetCode']);
+Route::post('/resetpass/parent', [AuthController::class, 'resetParentPasswordCode']);
+
+
+
+Route::put('/student/transfer/{id}', [StudentController::class, 'updateStudentTransfer']);

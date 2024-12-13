@@ -5,12 +5,15 @@ namespace App\Http\Controllers;
 use App\Models\Admin;
 use App\Models\Audit;
 use App\Models\Employee;
+use App\Models\EmployeeServiceRecords;
 use App\Models\Guardian;
 use App\Models\Registrar;
 use App\Models\Student;
 use App\Notifications\AdminLoginNotification;
 use App\Notifications\EmployeePasswordNotification;
+use App\Notifications\EmpoyeeResetCode;
 use App\Notifications\LoginSuccessful;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Hash;
@@ -81,6 +84,7 @@ class AuthController extends Controller
                     'type' => 'required|string',
                     'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
                     'desc' => 'nullable|string',
+                    'hired_date' => 'nullable|date', // Added hired_date validation
                 ]);
 
                 // Handle image upload if provided
@@ -93,6 +97,13 @@ class AuthController extends Controller
 
                 // Create the employee record
                 $employee = Employee::create($fields);
+
+                $hiredDate = $request->input('hired_date', Carbon::now()->toDateString()); // Default to current date if not provided
+
+                EmployeeServiceRecords::create([
+                    'employee_id' => $employee->id,
+                    'remarks' => 'Employee hired on ' . $hiredDate,
+                ]);
                 // Create an audit log
                 Audit::create([
                     'user' => 'Admin',
@@ -475,4 +486,167 @@ class AuthController extends Controller
 
         return response()->json(['message' => 'Your password has been reset, and your account is now activated.'], 200);
     }
+
+
+    public function sendResetCode(Request $request) {
+        $request->validate(['email' => 'required|email']);
+        $employee = Employee::where('email', $request->email)->first();
+
+        if (!$employee) {
+            return response()->json(['message' => 'Email not found'], 404);
+        }
+
+        $code = rand(100000, 999999); // Generate a random code
+        // Save the code (store in DB or cache)
+        $employee->reset_code = $code;
+        $employee->save();
+
+        // Send the code via email
+
+        $notification = new EmpoyeeResetCode($employee->email, $code);
+        $notification->sendResetCodeEmail();
+
+        return response()->json(['message' => 'Reset code sent to your email']);
+    }
+
+    public function resetPasswordCode(Request $request) {
+        // Validate incoming fields
+        $request->validate([
+            'email' => 'required|email',
+            'code' => 'required',
+            'new_password' => 'required|min:8',
+            'new_password_confirmation' => 'required|min:8',
+        ]);
+
+        // Check if the passwords match
+        if ($request->new_password !== $request->new_password_confirmation) {
+            return response()->json(['message' => 'The new password and confirmation do not match.'], 400);
+        }
+
+        // Find the employee based on email
+        $employee = Employee::where('email', $request->email)->first();
+
+        // Verify the reset code
+        if (!$employee || $employee->reset_code !== $request->code) {
+            return response()->json(['message' => 'Invalid code'], 400);
+        }
+
+        // Update the password and clear the reset code
+        $employee->password = bcrypt($request->new_password);
+        $employee->reset_code = null; // Clear the reset code
+        $employee->save();
+
+        // Respond with success
+        return response()->json(['message' => 'Password reset successfully']);
+    }
+
+
+
+    public function sendStudentResetCode(Request $request) {
+        $request->validate(['email' => 'required|email']);
+        $student = Student::where('email', $request->email)->first();
+
+        if (!$student) {
+            return response()->json(['message' => 'Email not found'], 404);
+        }
+
+        $code = rand(100000, 999999); // Generate a random code
+        // Save the code (store in DB or cache)
+        $student->reset_code = $code;
+        $student->save();
+
+        // Send the code via email
+
+        $notification = new EmpoyeeResetCode($student->email, $code);
+        $notification->sendResetCodeEmail();
+
+        return response()->json(['message' => 'Reset code sent to your email']);
+    }
+
+    public function resetStudentPasswordCode(Request $request) {
+        // Validate incoming fields
+        $request->validate([
+            'email' => 'required|email',
+            'code' => 'required',
+            'new_password' => 'required|min:8',
+            'new_password_confirmation' => 'required|min:8',
+        ]);
+
+        // Check if the passwords match
+        if ($request->new_password !== $request->new_password_confirmation) {
+            return response()->json(['message' => 'The new password and confirmation do not match.'], 400);
+        }
+
+        // Find the employee based on email
+        $student = Student::where('email', $request->email)->first();
+
+        // Verify the reset code
+        if (!$student || $student->reset_code !== $request->code) {
+            return response()->json(['message' => 'Invalid code'], 400);
+        }
+
+        // Update the password and clear the reset code
+        $student->password = bcrypt($request->new_password);
+        $student->reset_code = null; // Clear the reset code
+        $student->save();
+
+        // Respond with success
+        return response()->json(['message' => 'Password reset successfully']);
+    }
+
+
+    public function sendParentResetCode(Request $request) {
+        $request->validate(['email' => 'required|email']);
+        $guardian = Guardian::where('email', $request->email)->first();
+
+        if (!$guardian) {
+            return response()->json(['message' => 'Email not found'], 404);
+        }
+
+        $code = rand(100000, 999999); // Generate a random code
+        // Save the code (store in DB or cache)
+        $guardian->reset_code = $code;
+        $guardian->save();
+
+        // Send the code via email
+
+        $notification = new EmpoyeeResetCode($guardian->email, $code);
+        $notification->sendResetCodeEmail();
+
+        return response()->json(['message' => 'Reset code sent to your email']);
+    }
+
+    public function resetParentPasswordCode(Request $request) {
+        // Validate incoming fields
+        $request->validate([
+            'email' => 'required|email',
+            'code' => 'required',
+            'new_password' => 'required|min:8',
+            'new_password_confirmation' => 'required|min:8',
+        ]);
+
+        // Check if the passwords match
+        if ($request->new_password !== $request->new_password_confirmation) {
+            return response()->json(['message' => 'The new password and confirmation do not match.'], 400);
+        }
+
+        // Find the employee based on email
+        $guardian = Guardian::where('email', $request->email)->first();
+
+        // Verify the reset code
+        if (!$guardian || $guardian->reset_code !== $request->code) {
+            return response()->json(['message' => 'Invalid code'], 400);
+        }
+
+        // Update the password and clear the reset code
+        $guardian->password = bcrypt($request->new_password);
+        $guardian->reset_code = null; // Clear the reset code
+        $guardian->save();
+
+        // Respond with success
+        return response()->json(['message' => 'Password reset successfully']);
+    }
+
+
+
 }

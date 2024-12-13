@@ -4,7 +4,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
-import axiosClientPrincipal from "../axoisclient/axios-client-principal";
+import axiosClientRegistrar from "../axoisclient/axios-client-registrar";
 import Spinner from "react-bootstrap/Spinner";
 
 import Tab from "react-bootstrap/Tab";
@@ -17,16 +17,15 @@ import PrintIcon from "@mui/icons-material/Print";
 import MenuBookIcon from "@mui/icons-material/MenuBook";
 import GroupsIcon from "@mui/icons-material/Groups";
 import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
 
 import { toast, ToastContainer } from "react-toastify";
-import "./PrincipalCss.css";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import ConfirmationLoad from "../components/ConfirmationLoad";
 import PdfClassStudent from "../components/principal/PdfClassStudent";
 import PdfClassSubjects from "../components/principal/PdfClassSubjects";
+import ClassroomReg from "../components/registrar/classrooms";
 
-export default function PrinciaplClassroomList() {
+export default function RegistrarClassroom() {
     const [showNewClass, setNewClass] = useState(false);
     const [showEditClass, setEditClass] = useState(false);
     const [editId, setEditId] = useState();
@@ -92,7 +91,7 @@ export default function PrinciaplClassroomList() {
     const [printAdviser, setPrintAdviser] = useState("");
 
     const getTeachers = () => {
-        axiosClientPrincipal
+        axiosClientRegistrar
             .get("/all/teacher")
             .then(({ data }) => {
                 setTeachers(data.teachers);
@@ -104,7 +103,7 @@ export default function PrinciaplClassroomList() {
     };
 
     const getClassrooms = () => {
-        axiosClientPrincipal
+        axiosClientRegistrar
             .get("/classrooms")
             .then(({ data }) => {
                 setClassrooms(data.classrooms);
@@ -116,7 +115,7 @@ export default function PrinciaplClassroomList() {
     };
 
     const getStudentsNoClass = () => {
-        axiosClientPrincipal
+        axiosClientRegistrar
             .get("/student/no/classroom")
             .then(({ data }) => {
                 setCountStudents(data);
@@ -131,94 +130,6 @@ export default function PrinciaplClassroomList() {
         getClassrooms();
         getStudentsNoClass();
     }, []);
-
-    const addClassroom = () => {
-        const payload = {
-            title: titleRef.current.value,
-            grade_level: gradeRef.current.value,
-            adviser_id: adviserRef.current.value,
-        };
-
-        setFormLoading(true);
-
-        axiosClientPrincipal
-            .post("/classrooms", payload)
-            .then((response) => {
-                handleCloseNewClass();
-                toast.success("Classroom added successfully!"); // Success notification
-                getClassrooms();
-            })
-            .catch((error) => {
-                // Check for backend validation errors or other responses
-                if (error.response && error.response.data.message) {
-                    toast.error(error.response.data.message); // Show backend error message from toast
-                } else {
-                    toast.error("Please complete the required fields."); // Fallback error message
-                }
-            })
-            .finally(() => setFormLoading(false));
-    };
-
-    const deleteClass = () => {
-        setFormLoading(true);
-
-        axiosClientPrincipal
-            .delete(`/classrooms/${classId}`)
-            .then(() => {
-                handleCloseConfirm();
-                toast.success("Classroom deleted successfully!"); // Success notification
-                getClassrooms();
-            })
-            .catch((error) => {
-                console.error("Error deleting classroom:", error);
-                toast.error(
-                    "Failed to delete classroom. It may have associated subjects or students."
-                ); // Error notification
-            })
-            .finally(() => setFormLoading(false));
-    };
-
-    const editClassroom = () => {
-        const formData = new FormData();
-
-        formData.append("_method", "PUT");
-        if (titleRef.current.value) {
-            formData.append("title", titleRef.current.value);
-        }
-        // if (gradeRef.current.value) {
-        //     formData.append("grade_level", gradeRef.current.value);  // Ensure this is included if you want to update grade level
-        // }
-        if (adviserRef.current.value) {
-            formData.append("adviser_id", adviserRef.current.value);
-        } else {
-            formData.append("adviser_id", ""); // Ensures no adviser is set if the field is empty
-        }
-
-        setFormLoading(true);
-
-        axiosClientPrincipal
-            .post(`/classrooms/${editId}`, formData)
-            .then(() => {
-                getClassrooms();
-                handleCloseEditClass();
-                toast.success("Classroom updated successfully!"); // Success notification
-            })
-            .catch((err) => {
-                // Log the error to inspect its structure
-
-                // Check if the response contains a message
-                if (
-                    err.response &&
-                    err.response.data &&
-                    err.response.data.message
-                ) {
-                    toast.error(err.response.data.message); // Error message from backend
-                } else {
-                    toast.error("Error updating classroom!"); // Default error message
-                }
-            })
-            .finally(() => setFormLoading(false));
-    };
 
     const handleSearch = (e) => {
         const query = e.target.value.toLowerCase();
@@ -269,45 +180,6 @@ export default function PrinciaplClassroomList() {
                                 placement="top"
                                 overlay={
                                     <Tooltip className="custom-tooltip">
-                                        Edit Classroom
-                                    </Tooltip>
-                                }
-                            >
-                                <button
-                                    className="button-list button-orange"
-                                    onClick={() => {
-                                        setEditId(data.id);
-                                        setSelectedClassroom(data);
-                                        setEditClass(true);
-                                    }}
-                                >
-                                    <EditIcon />
-                                </button>
-                            </OverlayTrigger>
-
-                            <OverlayTrigger
-                                placement="top"
-                                overlay={
-                                    <Tooltip className="custom-tooltip">
-                                        Delete Classroom
-                                    </Tooltip>
-                                }
-                            >
-                                <button
-                                    className="button-list button-red"
-                                    onClick={() => {
-                                        setClassId(data.id);
-                                        setConfirm(true);
-                                    }}
-                                >
-                                    <DeleteIcon />
-                                </button>
-                            </OverlayTrigger>
-
-                            <OverlayTrigger
-                                placement="top"
-                                overlay={
-                                    <Tooltip className="custom-tooltip">
                                         View Students
                                     </Tooltip>
                                 }
@@ -325,7 +197,7 @@ export default function PrinciaplClassroomList() {
                                 </button>
                             </OverlayTrigger>
 
-                            <OverlayTrigger
+                            {/* <OverlayTrigger
                                 placement="top"
                                 overlay={
                                     <Tooltip className="custom-tooltip">
@@ -343,7 +215,7 @@ export default function PrinciaplClassroomList() {
                                 >
                                     <MenuBookIcon />
                                 </button>
-                            </OverlayTrigger>
+                            </OverlayTrigger> */}
 
                             <OverlayTrigger
                                 placement="top"
@@ -379,7 +251,7 @@ export default function PrinciaplClassroomList() {
                                     <GroupsIcon />
                                 </button>
                             </OverlayTrigger>
-
+                            {/*
                             <OverlayTrigger
                                 placement="top"
                                 overlay={
@@ -400,7 +272,7 @@ export default function PrinciaplClassroomList() {
                                     <PrintIcon />
                                     <MenuBookIcon />
                                 </button>
-                            </OverlayTrigger>
+                            </OverlayTrigger> */}
                         </td>
                     </tr>
                 ))}
@@ -486,13 +358,6 @@ export default function PrinciaplClassroomList() {
                 <div className="list-container">
                     <div className="d-flex justify-content-between list-title-container">
                         <h2>Classroom List</h2>
-                        <button
-                            className="button-list button-blue"
-                            onClick={() => setNewClass(true)}
-                        >
-                            <AddIcon sx={{ color: "white" }} />
-                            New Classroom
-                        </button>
                     </div>
                     <div>
                         <Tabs
@@ -523,153 +388,9 @@ export default function PrinciaplClassroomList() {
                     </div>
                 </div>
             </div>
-            <Modal show={showNewClass} onHide={handleCloseNewClass}>
-                <Modal.Header closeButton>
-                    <Modal.Title>Add Classroom</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <Form>
-                        <Form.Group className="mb-3">
-                            <Form.Label>Title</Form.Label>
-                            <Form.Control
-                                type="text"
-                                autoFocus
-                                ref={titleRef}
-                                placeholder="Ex. Falcon"
-                            />
-                        </Form.Group>
-                        <Form.Group className="mb-3">
-                            <Form.Label>Grade Level</Form.Label>
-                            <Form.Select ref={gradeRef}>
-                                <option value="">Grade Level</option>
-                                <option value="7">Grade 7</option>
-                                <option value="8">Grade 8</option>
-                                <option value="9">Grade 9</option>
-                                <option value="10">Grade 10</option>
-                                <option value="11">Grade 11</option>
-                                <option value="12">Grade 12</option>
-                            </Form.Select>
-                        </Form.Group>
-                        <Form.Group
-                            className="mb-3"
-                            controlId="exampleForm.ControlInput1"
-                        >
-                            <Form.Label>Adviser</Form.Label>
-                            <Form.Select ref={adviserRef}>
-                                <option value="">None</option>
-                                {teachers.map((data, index) => {
-                                    return (
-                                        <option key={index} value={data.id}>
-                                            {data.fname} {data.lname}
-                                        </option>
-                                    );
-                                })}
-                            </Form.Select>
-                        </Form.Group>
-                    </Form>
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button
-                        variant="primary"
-                        onClick={addClassroom}
-                        disabled={formLoading}
-                    >
-                        {formLoading ? (
-                            <>
-                                <Spinner
-                                    as="span"
-                                    animation="border"
-                                    size="sm"
-                                    role="status"
-                                    aria-hidden="true"
-                                />{" "}
-                                Save Changes
-                            </>
-                        ) : (
-                            "Save Changes"
-                        )}
-                    </Button>
-                </Modal.Footer>
-            </Modal>
-            <Modal show={showEditClass} onHide={handleCloseEditClass}>
-                <Modal.Header closeButton>
-                    <Modal.Title>Edit Classroom</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <Form>
-                        <Form.Group className="mb-3">
-                            <Form.Label>Title</Form.Label>
-                            <Form.Control
-                                type="text"
-                                autoFocus
-                                ref={titleRef}
-                                placeholder="Ex. Falcon"
-                                value={
-                                    selectedClassroom
-                                        ? selectedClassroom.title
-                                        : ""
-                                } // Set value from selected classroom
-                                onChange={(e) =>
-                                    setSelectedClassroom({
-                                        ...selectedClassroom,
-                                        title: e.target.value,
-                                    })
-                                } // Update state on change
-                            />
-                        </Form.Group>
-
-                        <Form.Group className="mb-3">
-                            <Form.Label>Adviser</Form.Label>
-                            <Form.Select
-                                ref={adviserRef}
-                                value={
-                                    selectedClassroom
-                                        ? selectedClassroom.adviser_id
-                                        : ""
-                                } // Set value from selected classroom
-                                onChange={(e) =>
-                                    setSelectedClassroom({
-                                        ...selectedClassroom,
-                                        adviser_id: e.target.value,
-                                    })
-                                } // Update state on change
-                            >
-                                <option value="">Select Adviser</option>
-                                {teachers.map((data, index) => (
-                                    <option key={index} value={data.id}>
-                                        {data.fname} {data.lname}
-                                    </option>
-                                ))}
-                            </Form.Select>
-                        </Form.Group>
-                    </Form>
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button
-                        variant="primary"
-                        onClick={editClassroom}
-                        disabled={formLoading}
-                    >
-                        {formLoading ? (
-                            <>
-                                <Spinner
-                                    as="span"
-                                    animation="border"
-                                    size="sm"
-                                    role="status"
-                                    aria-hidden="true"
-                                />{" "}
-                                Save Changes
-                            </>
-                        ) : (
-                            "Save Changes"
-                        )}
-                    </Button>
-                </Modal.Footer>
-            </Modal>
 
             {classId && (
-                <PrincipalClassView
+                <ClassroomReg
                     show={showView}
                     onHide={handleCloseView}
                     grade={gradeLevel}
@@ -685,16 +406,6 @@ export default function PrinciaplClassroomList() {
                     classId={classId}
                 />
             )}
-
-            <ConfirmationLoad
-                show={confirm}
-                onHide={handleCloseConfirm}
-                confirm={deleteClass}
-                title={
-                    "Are you sure you want to delete this classroom? Deleting this classroom will also remove all associated subjects, schedules, and students linked to it. This action is irreversible."
-                }
-                loading={formLoading}
-            />
 
             {showPrintStudents && (
                 <div style={{ display: "none" }}>

@@ -3,7 +3,10 @@ import { useReactToPrint } from "react-to-print";
 import Table from "react-bootstrap/Table";
 
 const FinanceReceipt = React.forwardRef(
-    ({ payAmounts, desc, financeName, studentName }, ref) => {
+    (
+        { payAmounts, desc, financeName, studentName, transactionNumber },
+        ref
+    ) => {
         const currentDate = new Date();
         const formattedDate = currentDate.toLocaleDateString("en-PH"); // Philippine date format
         const formattedTime = currentDate.toLocaleTimeString([], {
@@ -58,15 +61,19 @@ const FinanceReceipt = React.forwardRef(
                     <thead>
                         <tr>
                             <th style={{ textAlign: "left" }}>Description</th>
-                            <th style={{ textAlign: "right" }}>Amount</th>
+                            <th style={{ textAlign: "left" }}>Amount</th>
+                            <th style={{ textAlign: "left" }}>Tr. No.</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
                             <td>{desc}</td> {/* Description of the payment */}
-                            <td style={{ textAlign: "right" }}>
+                            <td style={{ textAlign: "left" }}>
                                 ₱{payAmounts.toLocaleString("en-PH")}
-                            </td>{" "}
+                            </td>
+                            <td style={{ textAlign: "left" }}>
+                                {transactionNumber}
+                            </td>
                             {/* Payment amount */}
                         </tr>
                     </tbody>

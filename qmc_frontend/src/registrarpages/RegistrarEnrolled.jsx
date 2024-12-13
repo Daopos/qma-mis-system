@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import SearchIcon from "@mui/icons-material/Search";
 import axiosClientRegistrar from "../axoisclient/axios-client-registrar";
 import Modal from "react-bootstrap/Modal";
@@ -26,6 +26,10 @@ import DropdownButton from "react-bootstrap/DropdownButton";
 import Pagination from "react-bootstrap/Pagination"; // Import Pagination component
 import PrintIcon from "@mui/icons-material/Print";
 import ConfirmationLoad from "../components/Confirmationload";
+import PrintNoPsa from "../components/registrar/PrintNoPsa";
+import PrintNoGoodMoral from "../components/registrar/PrintNoGoodMoral";
+import PrintNoReport from "../components/registrar/PrintNoReport";
+import PrintNoTranscript from "../components/registrar/PrintNoTranscript";
 export default function RegistrarEnrolled() {
     const [show, setShow] = useState(false);
     const [students, setStudents] = useState([]);
@@ -61,6 +65,14 @@ export default function RegistrarEnrolled() {
 
     const [resetLoading, setResetLoading] = useState(false);
 
+    const [showTransfer, setShowTransfer] = useState(false);
+    const [idTransfer, setIdTransfer] = useState(null);
+
+    const printPsaRef = useRef();
+    const printReportRef = useRef();
+    const printTranscriptRef = useRef();
+    const printGoodMoralRef = useRef();
+
     const getCountByGrade = () => {
         axiosClientRegistrar
             .get("/count/enrolled/students")
@@ -78,6 +90,16 @@ export default function RegistrarEnrolled() {
         setConfirmType(type); // Set type as either "student" or "parent"
         console.log(id, type);
         setShowConfirm(true);
+    };
+
+    const handleTrasnferId = (id) => {
+        setIdTransfer(id);
+
+        setShowTransfer(true);
+    };
+
+    const handleCloseTransfer = () => {
+        setShowTransfer(false);
     };
 
     const handleCloseConfirm = () => {
@@ -190,6 +212,20 @@ export default function RegistrarEnrolled() {
         }));
     };
 
+    const markStudentTrasnferred = () => {
+        setResetLoading(true);
+        axiosClientRegistrar
+            .put(`/student/transfer/${idTransfer}`)
+            .then(() => {
+                getStudents();
+                handleCloseTransfer();
+            })
+            .catch((err) => {
+                console.log(err);
+            })
+            .finally(() => setResetLoading(false));
+    };
+
     const renderTable = (studentsToRender) => {
         // Calculate the starting index based on the current page
         const currentPage = pagination[activeTab].currentPage;
@@ -205,6 +241,7 @@ export default function RegistrarEnrolled() {
                             <th>Name</th>
                             <th>Grade Level</th>
                             <th>Gender</th>
+                            <th>Status</th>
                             <th>Option</th>
                         </tr>
                     </thead>
@@ -231,6 +268,20 @@ export default function RegistrarEnrolled() {
                                     {data.grade_level}
                                 </td>
                                 <td data-label="Gender">{data.gender}</td>
+                                <td
+                                    data-label="Status"
+                                    style={{
+                                        color:
+                                            data.other === "enrolled"
+                                                ? "green"
+                                                : data.other === "transferred"
+                                                ? "orange"
+                                                : "black",
+                                    }}
+                                >
+                                    {data.other}
+                                </td>
+
                                 <td data-label="Option">
                                     {/* Render buttons and other elements as before */}
                                     <OverlayTrigger
@@ -332,6 +383,14 @@ export default function RegistrarEnrolled() {
                                             }}
                                         >
                                             Reset Parent Password
+                                        </MenuItem>
+                                        <MenuItem
+                                            onClick={() => {
+                                                handleTrasnferId(data.id);
+                                                handleClose(data.id);
+                                            }}
+                                        >
+                                            Mark as Transferred
                                         </MenuItem>
                                     </Menu>
                                 </td>
@@ -502,6 +561,39 @@ export default function RegistrarEnrolled() {
         updatePagination("12");
     }, [filteredStudents]);
 
+    const [showPrintNoPsa, setShowPrintNoPsa] = useState(false);
+    const [showPrintNoGoodMoral, setShowPrintNoGoodMoral] = useState(false);
+    const [showPrintNoReport, setShowPrintNoReport] = useState(false);
+    const [showPrintNoTranscript, setShowPrintNoTranscript] = useState(false);
+
+    const handlePsaPrintClick = () => {
+        if (printPsaRef.current) {
+            printPsaRef.current.resetAndPrint(); // This will reset and trigger the print
+        }
+        setShowPrintNoPsa(true);
+    };
+
+    const handleReportPrintClick = () => {
+        if (printReportRef.current) {
+            printReportRef.current.resetAndPrint(); // This will reset and trigger the print
+        }
+        setShowPrintNoReport(true);
+    };
+
+    const handleGoodMoralPrintClick = () => {
+        if (printGoodMoralRef.current) {
+            printGoodMoralRef.current.resetAndPrint(); // This will reset and trigger the print
+        }
+        setShowPrintNoGoodMoral(true);
+    };
+
+    const handleTranscriptPrintClick = () => {
+        if (printTranscriptRef.current) {
+            printTranscriptRef.current.resetAndPrint(); // This will reset and trigger the print
+        }
+        setShowPrintNoTranscript(true);
+    };
+
     return (
         <>
             <div className="list-body-container">
@@ -536,7 +628,7 @@ export default function RegistrarEnrolled() {
 
                 <div className="list-container">
                     <div className="d-flex justify-content-between list-title-container">
-                        <h2>Enrolled Students</h2>
+                        <h2> Students</h2>
                         {/* <button className="button-list button-blue">
                     <AddIcon sx={{ color: "#000000" }} />
                     Add Class
@@ -548,31 +640,19 @@ export default function RegistrarEnrolled() {
                                 variant="secondary"
                             >
                                 <Dropdown.Item
-                                    href="/printpdfgoodmoral"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
+                                    onClick={handleGoodMoralPrintClick}
                                 >
                                     Students without Good Moral
                                 </Dropdown.Item>
                                 <Dropdown.Item
-                                    href="/printpdftranscript"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
+                                    onClick={handleTranscriptPrintClick}
                                 >
                                     Students without Transcript
                                 </Dropdown.Item>
-                                <Dropdown.Item
-                                    href="/printpdfreportcard"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                >
+                                <Dropdown.Item onClick={handleReportPrintClick}>
                                     Students without Report Card
                                 </Dropdown.Item>
-                                <Dropdown.Item
-                                    href="/printpdfpsa"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                >
+                                <Dropdown.Item onClick={handlePsaPrintClick}>
                                     Students without PSA
                                 </Dropdown.Item>
                             </DropdownButton>
@@ -1100,6 +1180,38 @@ export default function RegistrarEnrolled() {
                 }
                 loading={resetLoading}
             />
+
+            <ConfirmationLoad
+                show={showTransfer}
+                onHide={handleCloseTransfer}
+                confirm={markStudentTrasnferred}
+                title={"Mark Student as Transferred "}
+                loading={resetLoading}
+            />
+
+            {showPrintNoPsa && (
+                <div style={{ display: "none" }}>
+                    <PrintNoPsa ref={printPsaRef} />
+                </div>
+            )}
+
+            {showPrintNoGoodMoral && (
+                <div style={{ display: "none" }}>
+                    <PrintNoGoodMoral ref={printGoodMoralRef} />
+                </div>
+            )}
+
+            {showPrintNoReport && (
+                <div style={{ display: "none" }}>
+                    <PrintNoReport ref={printReportRef} />
+                </div>
+            )}
+
+            {showPrintNoTranscript && (
+                <div style={{ display: "none" }}>
+                    <PrintNoTranscript ref={printTranscriptRef} />
+                </div>
+            )}
         </>
     );
 }

@@ -106,7 +106,10 @@ export default function StudentDashboard() {
                 <DashboardBox
                     BoxColor="#76ABAE"
                     title="Balance"
-                    count={balance.toLocaleString()}
+                    count={parseFloat(balance).toLocaleString(undefined, {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                    })}
                 />
                 <DashboardBox
                     BoxColor="#50727B"

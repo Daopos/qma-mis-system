@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import { useStateContext } from "../context/ContextProvider";
 import axiosClientTeacher from "../axoisclient/axois-client-teacher";
 import { ToastContainer, toast } from "react-toastify";
@@ -142,6 +142,15 @@ export default function TeacherLogin() {
                                 placeholder="Enter your password"
                                 disabled={loading}
                             />
+                            <Link
+                                to="/resetform/employee"
+                                style={{
+                                    fontSize: "14px",
+                                    textDecoration: "none",
+                                }}
+                            >
+                                Forgot Password?
+                            </Link>
                         </div>
 
                         <button

@@ -1,71 +1,94 @@
-import { useLocation } from "react-router-dom";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useImperativeHandle } from "react";
 import html2pdf from "html2pdf.js";
 import axiosClientPrincipal from "../../axoisclient/axios-client-principal";
 import Table from "react-bootstrap/Table";
-import { Container, Row, Col } from "react-bootstrap";
+import { Col, Container, Row } from "react-bootstrap";
 
-export default function PdfClassStudent() {
-    const location = useLocation();
-    const { classId, className, grade, adviser } = location.state || {
-        classId: "",
-        className: "",
-        grade: "",
-        adviser: "",
-    }; // default to empty if not set
+const PdfClassStudent = (props, ref) => {
+    const { classId, className, grade, adviser } = props;
     const pdfRef = useRef();
     const [studentList, setStudentList] = useState([]);
-    const [pdfGenerated, setPdfGenerated] = useState(false); // State to track if PDF has been generated
+    const [isLoading, setIsLoading] = useState(false); // For loading state
+    const [pdfGenerated, setPdfGenerated] = useState(false);
 
-    // Function to fetch student list
-    const getStudentList = () => {
-        axiosClientPrincipal
-            .get(`/classlist/class/${classId}`)
-            .then(({ data }) => {
-                setStudentList(data.students);
-            })
-            .catch((error) => {
-                console.error("Error fetching student list:", error);
-            });
+    // Fetch student list
+    const getStudentList = async () => {
+        setIsLoading(true);
+        try {
+            const { data } = await axiosClientPrincipal.get(
+                `/classlist/class/${classId}`
+            );
+            setStudentList(data.students || []);
+        } catch (error) {
+            console.error("Error fetching student list:", error);
+            setStudentList([]);
+        } finally {
+            setIsLoading(false);
+        }
     };
 
-    // Fetch the student list when component mounts
+    // Reset and fetch students when classId or grade changes
     useEffect(() => {
-        getStudentList();
-    }, [classId]);
+        if (classId) {
+            setStudentList([]); // Clear existing data
+            setPdfGenerated(false); // Reset PDF flag
+            getStudentList();
+        }
+    }, [classId, grade]);
 
-    // Function to generate the PDF
+    // Generate the PDF
     const generatePDF = () => {
         const element = pdfRef.current;
-
-        // Generate the PDF as a blob
         html2pdf()
             .from(element)
+            .set({
+                margin: [5, 0, 32, 0],
+            })
             .toPdf()
             .get("pdf")
             .then((pdf) => {
-                // Create a blob URL
                 const blob = pdf.output("blob");
                 const url = URL.createObjectURL(blob);
 
-                // Open the PDF in a new tab
-                window.open(url);
+                const iframe = document.createElement("iframe");
+                iframe.style.position = "absolute";
+                iframe.style.width = "0px";
+                iframe.style.height = "0px";
+                iframe.style.border = "none";
+                iframe.src = url;
+                document.body.appendChild(iframe);
+
+                iframe.contentWindow.print();
+                window.close();
             });
     };
 
-    // Generate PDF once the student list is loaded and not already generated
+    // Trigger PDF generation only when student list is ready
     useEffect(() => {
         if (studentList.length > 0 && !pdfGenerated) {
             generatePDF();
-            setPdfGenerated(true); // Mark PDF as generated
+            setPdfGenerated(true);
         }
-    }, [studentList, pdfGenerated]); // Add pdfGenerated to dependency array
+    }, [studentList, pdfGenerated]);
+
+    // Expose the resetAndPrint method
+    useImperativeHandle(ref, () => ({
+        resetAndPrint: () => {
+            setStudentList([]); // Clear current students
+            setPdfGenerated(false); // Reset PDF generation
+            getStudentList(); // Fetch new data
+        },
+    }));
+
+    if (isLoading) {
+        return <div>Loading...</div>; // Show loading state
+    }
 
     return (
         <div>
             <div ref={pdfRef}>
                 <div className="d-flex justify-content-center gap-2 p-4">
-                    <img src="/public/img/logo.png" alt="" width={100} />
+                    <img src="/img/logo.png" alt="" width={100} />
                     <div className="d-flex flex-column justify-content-center align-items-center">
                         <h3>QUEZON MEMORIAL ACADEMY</h3>
                         <h6>Umingan, Pangasinan</h6>
@@ -90,26 +113,37 @@ export default function PdfClassStudent() {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {studentList.map((data, index) => (
-                                        <tr key={index}>
-                                            <td>{index + 1}</td>
-                                            <td>{data.student.lrn}</td>
-                                            <td>{`${data.student.surname}, ${
-                                                data.student.firstname
-                                            }${
-                                                data.student.middlename
-                                                    ? `, ${data.student.middlename.charAt(
-                                                          0
-                                                      )}.`
-                                                    : ""
-                                            }${
-                                                data.student.extension_name
-                                                    ? ` ${data.student.extension_name}`
-                                                    : ""
-                                            }`}</td>
-                                            <td>{data.student.gender}</td>
+                                    {studentList.length === 0 ? (
+                                        <tr>
+                                            <td
+                                                colSpan="4"
+                                                className="text-center"
+                                            >
+                                                No Students Available
+                                            </td>
                                         </tr>
-                                    ))}
+                                    ) : (
+                                        studentList.map((data, index) => (
+                                            <tr key={data.student.id}>
+                                                <td>{index + 1}</td>
+                                                <td>{data.student.lrn}</td>
+                                                <td>{`${
+                                                    data.student.surname
+                                                }, ${data.student.firstname}${
+                                                    data.student.middlename
+                                                        ? `, ${data.student.middlename.charAt(
+                                                              0
+                                                          )}.`
+                                                        : ""
+                                                }${
+                                                    data.student.extension_name
+                                                        ? ` ${data.student.extension_name}`
+                                                        : ""
+                                                }`}</td>
+                                                <td>{data.student.gender}</td>
+                                            </tr>
+                                        ))
+                                    )}
                                 </tbody>
                             </Table>
                         </Col>
@@ -118,4 +152,6 @@ export default function PdfClassStudent() {
             </div>
         </div>
     );
-}
+};
+
+export default React.forwardRef(PdfClassStudent);

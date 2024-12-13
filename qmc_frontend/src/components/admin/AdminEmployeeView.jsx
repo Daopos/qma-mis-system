@@ -13,6 +13,7 @@ export default function AdminEmployeeView({
     address,
     type,
     email,
+    service,
 }) {
     return (
         <Modal
@@ -98,6 +99,20 @@ export default function AdminEmployeeView({
                         disabled
                     />
                 </Form.Group>
+                <div className="mt-3">
+                    <h5>Service Records:</h5>
+                    {service && service.length > 0 ? (
+                        <ul>
+                            {service.map((record) => (
+                                <li key={record.id}>
+                                    <strong>{record.remarks}</strong>
+                                </li>
+                            ))}
+                        </ul>
+                    ) : (
+                        <p>No service records available.</p>
+                    )}
+                </div>
             </Modal.Body>
         </Modal>
     );

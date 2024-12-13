@@ -63,7 +63,7 @@ class StudentPaymentController extends Controller
     public function getStudentPayment($id) {
         // Fetch all payments for the student and group by academic year
         $payments = StudentPayment::where('student_id', $id)
-            ->select('academic_year', 'desc', 'amount', 'created_at', 'encoder')
+            ->select('academic_year', 'desc', 'amount', 'created_at', 'encoder', 'transaction_number')
             ->orderBy('academic_year')
             ->get()
             ->groupBy('academic_year');
@@ -77,6 +77,7 @@ class StudentPaymentController extends Controller
                     'desc' => $record->desc,
                     'amount' => $record->amount,
                     'encoder' => $record->encoder,
+                    'transaction_number' => $record->transaction_number,
              'created_at' => \Carbon\Carbon::parse($record->created_at)->format('F j, Y \a\t h:i A'),  // Format the date
                 ];
             }
@@ -94,7 +95,7 @@ class StudentPaymentController extends Controller
         $id = Auth::user()->id;
 
         $payments = StudentPayment::where('student_id', $id)
-            ->select('academic_year', 'desc', 'amount', 'encoder', 'created_at')
+            ->select('academic_year', 'desc', 'amount', 'encoder', 'created_at','transaction_number')
             ->orderBy('academic_year')
             ->get()
             ->groupBy('academic_year');
@@ -108,7 +109,8 @@ class StudentPaymentController extends Controller
                     'desc' => $record->desc,
                     'amount' => $record->amount,
                     'encoder' => $record->encoder,
-                    'created_at' => $record->created_at
+                    'created_at' => $record->created_at,
+                    'transaction_number' => $record->transaction_number,
                 ];
             }
             $response[] = [
@@ -125,7 +127,7 @@ class StudentPaymentController extends Controller
         $id = Auth::user()->student_id;
 
         $payments = StudentPayment::where('student_id', $id)
-            ->select('academic_year', 'desc', 'amount', 'encoder', 'created_at')
+            ->select('academic_year', 'desc', 'amount', 'encoder', 'created_at', 'transaction_number')
             ->orderBy('academic_year')
             ->get()
             ->groupBy('academic_year');
@@ -139,7 +141,9 @@ class StudentPaymentController extends Controller
                     'desc' => $record->desc,
                     'amount' => $record->amount,
                     'encoder' => $record->encoder,
-                    'created_at' => $record->created_at
+                    'created_at' => $record->created_at,
+                    'transaction_number' => $record->transaction_number,
+
                 ];
             }
             $response[] = [
