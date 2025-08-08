@@ -1,1 +1,4 @@
 IntelleQSchool: A Portal Management System that helps ease the lives of students in Quezon Memorial Academy in Umingan, Pangasinan, the project that the researchers develop will help the students in getting necessary information from the SMIS. The SMIS will serve as a gateway to the student’s with tracking their grades, accessing course materials, and viewing their schedules. The process of admitting students through the SMIS that will contribute in making the student’s life easier. The project also helps the students to conveniently access educational resources that the teacher will provide ranging from class materials to class works and lecture notes.  
+
+
+# <p align="center"><a href="/QMA_CAPSTONE.pdf" target="_blank" style="font-size: 48px; font-weight: bold; text-decoration: none;">SYTEM MANUAL(CLICK ME)</a></p>
